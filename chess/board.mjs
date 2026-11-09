@@ -1,6 +1,7 @@
 // Минималистичная доска для README: плоские фигуры Cburnett (CC BY-SA 3.0, source/pieces/),
-// светлые/тёмно-серые клетки, координаты в углах клеток, подсветка последнего хода и шаха.
-// Без системных шрифтов — координаты рисуются встроенным пиксельным шрифтом (одинаково в GitHub Actions).
+// светлые/тёмно-серые клетки, координаты в углах клеток, подсветка последнего хода и шаха,
+// шкала оценки слева, как на chess.com.
+// Без системных шрифтов — подписи рисуются встроенным пиксельным шрифтом (одинаково в GitHub Actions).
 import { createCanvas, loadImage } from '@napi-rs/canvas';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -8,22 +9,36 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SQ = 90;                          // клетка, физ. px; доска 720×720
-const SIZE = SQ * 8, R = 10;            // скругление углов доски
+const BOARD = SQ * 8, R = 10;           // скругление углов
+const BAR = 46, GAP = 12;               // шкала оценки слева
+const W = BAR + GAP + BOARD, H = BOARD;
 const BG = '#0d1117';
-const LIGHT = '#e3e5e8', DARK = '#6b727d';
+const LIGHT = '#e3e5e8', DARK = '#6b727d', BAR_DARK = '#30353c';
 const LAST = 'rgba(214,232,96,0.5)';    // акцент из шапки
 const CHECK = [235, 64, 52];
 
-// пиксельный шрифт 3×5 для координат
+// пиксельный шрифт 3×5
 const G = {
   a: '...|.##|#.#|#.#|.##', b: '#..|##.|#.#|#.#|##.', c: '...|.##|#..|#..|.##', d: '..#|.##|#.#|#.#|.##',
   e: '...|.#.|###|#..|.##', f: '.##|#..|##.|#..|#..', g: '.##|#.#|.##|..#|##.', h: '#..|##.|#.#|#.#|#.#',
-  1: '.#.|##.|.#.|.#.|###', 2: '##.|..#|.#.|#..|###', 3: '##.|..#|.#.|..#|##.', 4: '#.#|#.#|###|..#|..#',
-  5: '###|#..|##.|..#|##.', 6: '.##|#..|##.|#.#|.#.', 7: '###|..#|.#.|.#.|.#.', 8: '.#.|#.#|.#.|#.#|.#.',
+  0: '.#.|#.#|#.#|#.#|.#.', 1: '.#.|##.|.#.|.#.|###', 2: '##.|..#|.#.|#..|###', 3: '##.|..#|.#.|..#|##.',
+  4: '#.#|#.#|###|..#|..#', 5: '###|#..|##.|..#|##.', 6: '.##|#..|##.|#.#|.#.', 7: '###|..#|.#.|.#.|.#.',
+  8: '.#.|#.#|.#.|#.#|.#.', 9: '.#.|#.#|.##|..#|##.', '+': '...|.#.|###|.#.|...', '-': '...|...|###|...|...',
+  '.': '...|...|...|...|.#.', M: '#.#|###|###|#.#|#.#',
 };
-function glyph(ctx, ch, x, y, px, color) {
+function text(ctx, str, x, y, px, color, align = 'left') {
+  const w = str.length * 4 * px - px;
+  let X = align === 'center' ? Math.round(x - w / 2) : x;
   ctx.fillStyle = color;
-  G[ch].split('|').forEach((row, r) => [...row].forEach((c, k) => { if (c === '#') ctx.fillRect(x + k * px, y + r * px, px, px); }));
+  for (const ch of str) {
+    G[ch]?.split('|').forEach((row, r) => [...row].forEach((c, k) => { if (c === '#') ctx.fillRect(X + k * px, y + r * px, px, px); }));
+    X += 4 * px;
+  }
+}
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
 }
 
 // SVG растрируем сразу в размер клетки: задаём width/height и viewBox
@@ -43,22 +58,43 @@ async function pieces() {
   return PIECES;
 }
 
-const sqXY = sq => ({ x: (sq.charCodeAt(0) - 97) * SQ, y: (8 - Number(sq[1])) * SQ });
+const sqXY = sq => ({ x: BAR + GAP + (sq.charCodeAt(0) - 97) * SQ, y: (8 - Number(sq[1])) * SQ });
+
+// доля белых на шкале и подпись: score — с точки зрения белых, { cp } | { mate }
+function evalBar(score) {
+  if (!score) return { share: 0.5, label: '0.0' };
+  if (score.mate !== undefined) return { share: score.mate > 0 ? 1 : 0, label: `M${Math.abs(score.mate)}`, white: score.mate > 0 };
+  const cp = score.cp;
+  // знак не пишем: сторону и так видно по тому, сверху или снизу подпись
+  return { share: Math.min(0.95, Math.max(0.05, 1 / (1 + Math.exp(-cp / 260)))), label: (Math.abs(cp) / 100).toFixed(1), white: cp >= 0 };
+}
 
 /**
  * board: chess.board() (ряды от 8-й горизонтали к 1-й)
- * last:  { from, to } | null;  check: поле короля под шахом | null
+ * last:  { from, to } | null;  check: поле короля под шахом | null;  score: оценка за белых
  */
-export async function renderBoard({ board, last, check }) {
+export async function renderBoard({ board, last, check, score }) {
   const P = await pieces();
-  const can = createCanvas(SIZE, SIZE), ctx = can.getContext('2d');
-  ctx.fillStyle = BG; ctx.fillRect(0, 0, SIZE, SIZE);
-  ctx.save();
-  ctx.beginPath(); ctx.roundRect ? ctx.roundRect(0, 0, SIZE, SIZE, R) : ctx.rect(0, 0, SIZE, SIZE); ctx.clip();
+  const can = createCanvas(W, H), ctx = can.getContext('2d');
+  ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
 
+  // шкала оценки
+  const ev = evalBar(score), split = Math.round(H * (1 - ev.share));
+  ctx.save(); roundRect(ctx, 0, 0, BAR, H, 6); ctx.clip();
+  ctx.fillStyle = BAR_DARK; ctx.fillRect(0, 0, BAR, H);
+  ctx.fillStyle = LIGHT; ctx.fillRect(0, split, BAR, H - split);
+  ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fillRect(0, H / 2 - 1, BAR, 2); // середина
+  ctx.restore();
+  const px = 3;
+  if (ev.white) text(ctx, ev.label, BAR / 2, H - 5 * px - 8, px, BAR_DARK, 'center');
+  else text(ctx, ev.label, BAR / 2, 8, px, LIGHT, 'center');
+
+  // доска
+  const X0 = BAR + GAP;
+  ctx.save(); roundRect(ctx, X0, 0, BOARD, BOARD, R); ctx.clip();
   for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++) {
     ctx.fillStyle = (r + f) & 1 ? DARK : LIGHT;
-    ctx.fillRect(f * SQ, r * SQ, SQ, SQ);
+    ctx.fillRect(X0 + f * SQ, r * SQ, SQ, SQ);
   }
   if (last) for (const s of [last.from, last.to]) { const p = sqXY(s); ctx.fillStyle = LAST; ctx.fillRect(p.x, p.y, SQ, SQ); }
   if (check) {
@@ -68,14 +104,14 @@ export async function renderBoard({ board, last, check }) {
     ctx.fillStyle = g; ctx.fillRect(p.x, p.y, SQ, SQ);
   }
   // координаты в углах клеток, цветом соседней клетки — как на chess.com / lichess
-  const px = 4;
+  const cp = 4;
   for (let i = 0; i < 8; i++) {
-    glyph(ctx, String(8 - i), 6, i * SQ + 6, px, i & 1 ? LIGHT : DARK);
-    glyph(ctx, 'abcdefgh'[i], i * SQ + SQ - 3 * px - 6, SIZE - 5 * px - 6, px, i & 1 ? DARK : LIGHT);
+    text(ctx, String(8 - i), X0 + 6, i * SQ + 6, cp, i & 1 ? LIGHT : DARK);
+    text(ctx, 'abcdefgh'[i], X0 + i * SQ + SQ - 3 * cp - 6, BOARD - 5 * cp - 6, cp, i & 1 ? DARK : LIGHT);
   }
   for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++) {
     const p = board[r][f];
-    if (p) ctx.drawImage(P[p.color + p.type], f * SQ, r * SQ, SQ, SQ);
+    if (p) ctx.drawImage(P[p.color + p.type], X0 + f * SQ, r * SQ, SQ, SQ);
   }
   ctx.restore();
   try { return await can.encode('webp', 90); } catch { return can.toBuffer('image/png'); }
