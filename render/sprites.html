@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>sprites</title>
+<style>
+  body { margin: 0; background: #0d1117; color: #c9d1d9; font: 12px Menlo, monospace; }
+  #log { padding: 8px; white-space: pre; }
+  #wrap { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; }
+  #wrap img { height: 220px; background: #0d1117; outline: 1px solid #30363d; }
+</style>
+<script type="importmap">
+  { "imports": {
+      "three": "/node_modules/three/build/three.module.js",
+      "three/addons/": "/node_modules/three/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="log">loading…</div>
+<div id="wrap"></div>
+<script type="module">
+// Рендер фигур из CC0-набора Poly Haven «Chess Set» (Riley Queen) в прозрачные PNG.
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const log = s => { document.getElementById('log').textContent += '\n' + s; };
+const params = new URLSearchParams(location.search);
+const ONLY = params.get('only')?.split(',');
+
+// px на мировую единицу задаём от высоты чёрного короля, чтобы все фигуры были в одном масштабе
+const KING_PX = 1000;
+const ELEV = THREE.MathUtils.degToRad(Number(params.get('elev') ?? 7));
+const JOBS = [
+  // name, node, yaw (deg), scale (доля KING_PX)
+  ['w_pawn', 'piece_pawn_white_01', 0, 0.42],
+  ['w_rook', 'piece_rook_white_01', 0, 0.42],
+  ['w_bishop', 'piece_bishop_white_01', 0, 0.42],
+  ['w_queen', 'piece_queen_white', 0, 0.42],
+  ['w_king', 'piece_king_white', 0, 0.42],
+  ['w_knight_a', 'piece_knight_white_01', 90, 0.42], // конь смотрит вправо
+  ['w_queen_big', 'piece_queen_white', 0, 0.75],
+  ['b_king', 'piece_king_black', 0, 1.0],
+];
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = Number(params.get('exp') ?? 1.0);
+renderer.setClearColor(0x000000, 0);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.55;
+
+// студийный свет: ключ сверху-слева, контровой справа-сзади, слабая заливка
+const key = new THREE.DirectionalLight(0xffffff, 3.2); key.position.set(-2.2, 3.0, 2.6); scene.add(key);
+const rim = new THREE.DirectionalLight(0xffffff, 2.6); rim.position.set(2.8, 1.6, -2.4); scene.add(rim);
+const rim2 = new THREE.DirectionalLight(0xffffff, 1.2); rim2.position.set(-2.8, 1.0, -2.0); scene.add(rim2);
+const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(1.5, 0.3, 3.0); scene.add(fill);
+
+const gltf = await new GLTFLoader().loadAsync('/source/chess_set/chess_set_2k.gltf');
+const nodes = Object.fromEntries(gltf.scene.children.map(n => [n.name, n]));
+log(`loaded ${Object.keys(nodes).length} nodes`);
+
+const kingBox = new THREE.Box3().setFromObject(nodes.piece_king_black);
+const kingH = kingBox.max.y - kingBox.min.y;
+const PPU = KING_PX / kingH;
+
+for (const [name, nodeName, yaw, scale] of JOBS) {
+  if (ONLY && !ONLY.includes(name)) continue;
+  const piece = nodes[nodeName].clone();
+  piece.position.set(0, 0, 0);
+  const holder = new THREE.Group();
+  holder.add(piece);
+  holder.rotation.y = THREE.MathUtils.degToRad(yaw);
+  scene.add(holder);
+  holder.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(holder);
+  const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
+  const ppu = PPU * scale;
+  const pad = 0.04 * kingH;
+  const halfW = Math.max(size.x, size.z) / 2 + pad, halfH = size.y / 2 + pad;
+  const W = Math.ceil(halfW * 2 * ppu), H = Math.ceil(halfH * 2 * ppu * 1.02);
+  renderer.setSize(W, H, false);
+  const cam = new THREE.OrthographicCamera(-W / 2 / ppu, W / 2 / ppu, H / 2 / ppu, -H / 2 / ppu, 0.01, 10);
+  const d = 2;
+  cam.position.set(c.x, c.y + Math.sin(ELEV) * d, c.z + Math.cos(ELEV) * d);
+  cam.lookAt(c);
+  renderer.render(scene, cam);
+  const blob = await new Promise(r => renderer.domElement.toBlob(r, 'image/png'));
+  await fetch(`/save/${name}.png`, { method: 'POST', body: blob });
+  const img = new Image(); img.src = URL.createObjectURL(blob); img.title = name;
+  document.getElementById('wrap').appendChild(img);
+  log(`${name}  ${W}x${H}`);
+  scene.remove(holder);
+}
+log('DONE');
+</script>
+</body>
+</html>
