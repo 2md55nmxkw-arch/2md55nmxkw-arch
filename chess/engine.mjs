@@ -27,24 +27,40 @@ function open() {
   return { send, until, listen: fn => listeners.add(fn), close: () => { try { send('quit'); } catch {} p.kill(); } };
 }
 
-// оценка с точки зрения стороны, которая ходит: { cp } или { mate }
-async function search(fen, { skill = 20, go }) {
+async function session(fn) {
   const e = open();
   try {
     e.send('uci'); await e.until(l => l === 'uciok');
-    e.send(`setoption name Skill Level value ${skill}`);
     e.send('setoption name Contempt value 0'); // иначе SF10 завышает оценку в пользу стороны на ходу
-    e.send('isready'); await e.until(l => l === 'readyok');
-    e.send('ucinewgame'); e.send(`position fen ${fen}`);
-    let score = null;
-    e.listen(l => { const m = /score (cp|mate) (-?\d+)/.exec(l); if (m) score = { [m[1]]: Number(m[2]) }; });
-    e.send(`go ${go}`);
-    const best = await e.until(l => l.startsWith('bestmove'));
-    return { move: best.split(/\s+/)[1], score };
+    return await fn(e);
   } finally { e.close(); }
 }
 
-/** ход движка (ослабленный Skill Level, чтобы его можно было обыграть) */
-export const engineMove = (fen, skill = 5) => search(fen, { skill, go: 'movetime 800' });
-/** честная оценка позиции на полной силе */
-export const evaluate = fen => search(fen, { skill: 20, go: 'depth 12' }).then(r => r.score);
+/** ход движка, ослабленный Skill Level, чтобы его можно было обыграть */
+export const engineMove = (fen, skill = 5) => session(async e => {
+  e.send(`setoption name Skill Level value ${skill}`);
+  e.send('isready'); await e.until(l => l === 'readyok');
+  e.send('ucinewgame'); e.send(`position fen ${fen}`);
+  e.send('go movetime 800');
+  const best = await e.until(l => l.startsWith('bestmove'));
+  return { move: best.split(/\s+/)[1] };
+});
+
+/**
+ * честный анализ на полной силе: лучшие линии с оценкой с точки зрения стороны на ходу
+ * → { best, lines: [{ score: { cp } | { mate }, pv: ['e2e4', …] }, …] }
+ */
+export const analyse = (fen, { depth = 14, multipv = 2 } = {}) => session(async e => {
+  e.send(`setoption name MultiPV value ${multipv}`);
+  e.send('isready'); await e.until(l => l === 'readyok');
+  e.send('ucinewgame'); e.send(`position fen ${fen}`);
+  const lines = [];
+  e.listen(l => {
+    if (!l.startsWith('info') || / (upper|lower)bound/.test(l)) return;
+    const mp = /\bmultipv (\d+)/.exec(l), sc = /\bscore (cp|mate) (-?\d+)/.exec(l), pv = /\bpv (.+)$/.exec(l);
+    if (sc && pv) lines[(mp ? +mp[1] : 1) - 1] = { score: { [sc[1]]: +sc[2] }, pv: pv[1].trim().split(/\s+/) };
+  });
+  e.send(`go depth ${depth}`);
+  const best = await e.until(l => l.startsWith('bestmove'));
+  return { best: best.split(/\s+/)[1], lines: lines.filter(Boolean) };
+});

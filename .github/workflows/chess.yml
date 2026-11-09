@@ -8,7 +8,7 @@ on:
 
 # ходы обрабатываются строго по одному, чтобы два одновременных хода не затёрли друг друга
 concurrency:
-  group: chess
+  group: readme
   cancel-in-progress: false
 
 permissions:

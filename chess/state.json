@@ -2,6 +2,7 @@
   "recent": [
     "2md55nmxkw-arch"
   ],
+  "hall": [],
   "game": 1,
   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/N7/PPPPPPPP/1RBQKBNR w Kkq - 0 3",
   "moves": [
@@ -44,6 +45,7 @@
   "games": [],
   "notice": null,
   "eval": {
-    "cp": -161
-  }
+    "cp": -179
+  },
+  "img": "board-1-4.webp"
 }
