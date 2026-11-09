@@ -20,7 +20,7 @@ const SPRITES = n => path.join(ROOT, 'source', 'sprites', `${n}.png`);
 const GEN = n => path.join(ROOT, 'source', 'gen', `${n}.png`);
 
 // ───────────────────────── config ─────────────────────────
-const LW = 840, LH = 300;
+const LW = 840, LH = 334;         // нижние ~34 px — фейд в фон страницы и чипы стека поверх него
 const S = Number(process.env.SCALE ?? 1.5); // 1.5 ≈ 3.8 МБ, 2 — чётче, но ≈ 6 МБ
 const WP = Math.round(LW * S), HP = Math.round(LH * S);
 const DELAY = 50;                 // 20 fps
@@ -332,6 +332,44 @@ const HANDS = [
 for (const H of HANDS) H.spr = grainHand(trim(keyGreen(await readImage(GEN(H.file)))), H.long, H.arm);
 console.log(`assets ready in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
 
+// ───────────────────────── bottom fade + stack chips ─────────────────────────
+// GitHub не даёт наложить HTML поверх картинки, поэтому «бэйджи» вшиты в сам кадр:
+// низ каждого кадра растворяется в фон страницы, а чипы лежат поверх фейда.
+const STACK = ['c++', 'luau', 'lua', 'typescript', 'python'];
+const FADE_FROM = 246;
+const FADE = new Float32Array(HP);
+for (let y = 0; y < HP; y++) FADE[y] = Math.pow(clamp((y / S - FADE_FROM) / (LH - 4 - FADE_FROM)), 1.6);
+const CHIPS = (() => {
+  const c = createCanvas(WP, HP), x = c.getContext('2d');
+  x.setTransform(S, 0, 0, S, 0, 0);
+  x.font = `13px ${MONO}`;
+  const padX = 7, h = 22, gap = 8, r = 6;
+  const ws = STACK.map(s => x.measureText(s).width + padX * 2);
+  let cx = (LW - ws.reduce((a, b) => a + b, 0) - gap * (STACK.length - 1)) / 2;
+  const y = LH - h - 8;
+  STACK.forEach((s, i) => {
+    const w = ws[i];
+    x.fillStyle = 'rgb(52,57,65)'; // цвет инлайн-кода GitHub в тёмной теме
+    x.beginPath();
+    x.moveTo(cx + r, y); x.arcTo(cx + w, y, cx + w, y + h, r); x.arcTo(cx + w, y + h, cx, y + h, r);
+    x.arcTo(cx, y + h, cx, y, r); x.arcTo(cx, y, cx + w, y, r); x.closePath(); x.fill();
+    x.fillStyle = '#e6edf3'; x.fillText(s, cx + padX, y + 15.5);
+    cx += w + gap;
+  });
+  return x.getImageData(0, 0, WP, HP).data;
+})();
+function finishFrame(d) {
+  for (let y = Math.floor(FADE_FROM * S); y < HP; y++) {
+    const a = FADE[y], o = y * WP * 4;
+    if (a <= 0) continue;
+    for (let i = o; i < o + WP * 4; i += 4) {
+      d[i] += (BG[0] - d[i]) * a; d[i + 1] += (BG[1] - d[i + 1]) * a; d[i + 2] += (BG[2] - d[i + 2]) * a;
+      const k = CHIPS[i + 3] / 255;
+      if (k) { d[i] += (CHIPS[i] - d[i]) * k; d[i + 1] += (CHIPS[i + 1] - d[i + 1]) * k; d[i + 2] += (CHIPS[i + 2] - d[i + 2]) * k; }
+    }
+  }
+}
+
 // ───────────────────────── boards ─────────────────────────
 const POSITIONS = [
   ['rnbqkbnr', 'pppppppp', '........', '........', '....P...', '........', 'PPPP.PPP', 'RNBQKBNR'],
@@ -584,7 +622,6 @@ function sceneLineup(f) {
     txt('EVERY PIECE WAS A PAWN ONCE.', 40, 58, { size: 26, face: COND });
     txt('2md55.arch', LW - 40, 52, { size: 11, align: 'right', color: '#c9d1d9' });
     txt('he/him · smth maybe', LW - 40, 67, { size: 9, align: 'right', color: '#6e7681' });
-    txt('endfield-il2dump  ·  Loliland-ModLoader  ·  LuauEmu  ·  WindUI', LW / 2, 288, { size: 9.5, align: 'center', color: '#8b949e' });
   }
 }
 
@@ -607,6 +644,7 @@ function renderFrame(f) {
   if (fx?.overlay) fx.overlay();
   const img = ctx.getImageData(0, 0, WP, HP);
   if (fx?.post) fx.post(img.data);
+  finishFrame(img.data);
   return img;
 }
 
