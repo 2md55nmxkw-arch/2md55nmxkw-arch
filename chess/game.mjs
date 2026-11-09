@@ -8,6 +8,7 @@
 import { Chess } from 'chess.js';
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { renderBoard } from './board.mjs';
 import { engineMove, analyse } from './engine.mjs';
@@ -48,10 +49,10 @@ function marks(state) {
 async function publish(state) {
   const chess = new Chess(state.fen);
   clean(/^board-.*\.webp$/);
-  state.img = `board-${state.game}-${state.moves.length}.webp`; // новое имя на каждый ход — мимо кеша картинок
-  fs.writeFileSync(path.join(DIR, state.img), await renderBoard({
-    board: chess.board(), last: state.last, check: kingInCheck(chess), score: state.eval, marks: marks(state),
-  }));
+  const buf = await renderBoard({ board: chess.board(), last: state.last, check: kingInCheck(chess), score: state.eval, marks: marks(state) });
+  // имя меняется вместе с содержимым картинки — мимо кеша GitHub и браузеров
+  state.img = `board-${state.game}-${state.moves.length}-${createHash('sha1').update(buf).digest('hex').slice(0, 6)}.webp`;
+  fs.writeFileSync(path.join(DIR, state.img), buf);
   fs.mkdirSync(HALL, { recursive: true });
   if (!fs.existsSync(path.join(HALL, 'empty.webp'))) fs.writeFileSync(path.join(HALL, 'empty.webp'), await renderEmptyTrophy());
   save(state);
@@ -93,7 +94,7 @@ async function engineTurn(state, chess, pre) {
   const { move } = await engineMove(fen);
   const mv = chess.move({ from: move.slice(0, 2), to: move.slice(2, 4), promotion: move[4] });
   const post = chess.isGameOver() ? null : await analyse(chess.fen());
-  apply(state, mv, ENGINE, classify(fen, move, pre, post));
+  apply(state, mv, ENGINE, classify(fen, move, pre, post, [...state.moves.map(m => m.san), mv.san]));
   if (post?.lines?.[0]) state.eval = post.lines[0].score; // теперь ход белых — оценка уже за белых
   return mv;
 }
@@ -124,7 +125,7 @@ async function play() {
   const pre = await analyse(fen0);
   chess.move({ from, to, promotion: promo });
   const post = chess.isGameOver() ? null : await analyse(chess.fen());
-  const cls = classify(fen0, from + to + (promo ?? ''), pre, post);
+  const cls = classify(fen0, from + to + (promo ?? ''), pre, post, [...state.moves.map(m => m.san), mv.san]);
   apply(state, mv, user, cls);
   state.players[user] = (state.players[user] ?? 0) + 1;
   state.recent = [user, ...state.recent.filter(u => u !== user)].slice(0, 12);
@@ -161,6 +162,19 @@ if (arg === '--reset') {
   else if (!chess.isGameOver()) state.eval = (await analyse(chess.fen(), { multipv: 1 })).lines[0]?.score ?? state.eval;
   await publish(state);
   console.log('re-rendered');
+} else if (arg === '--reanalyze') { // переразобрать уже сыгранные ходы текущей партии (после правок классификатора)
+  const state = load(), c = new Chess();
+  let pre = await analyse(c.fen());
+  for (const m of state.moves) {
+    const fen = c.fen(), history = [...c.history(), m.san];
+    c.move(m.san);
+    const post = c.isGameOver() ? null : await analyse(c.fen());
+    m.cls = classify(fen, m.uci, pre, post, history);
+    pre = post;
+  }
+  if (pre?.lines?.[0] && c.turn() === 'w') state.eval = pre.lines[0].score;
+  await publish(state);
+  console.log('re-analysed', state.moves.map(m => `${m.san}:${m.cls}`).join(' '));
 } else {
   await play();
 }

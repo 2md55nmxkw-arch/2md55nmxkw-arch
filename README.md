@@ -16,11 +16,11 @@
 <!-- chess:start -->
 <table align="center">
 <tr>
-<td align="center"><img src="chess/board-1-8.webp" width="400" alt="Chess board, game 1. Position (FEN): 1nbqkbnr/rpp2ppp/8/4p3/3p4/8/PPPPPPPP/1RBQKBNR w Kk - 0 5"></td>
+<td align="center"><img src="chess/board-1-8-f2f598.webp" width="400" alt="Chess board, game 1. Position (FEN): 1nbqkbnr/rpp2ppp/8/4p3/3p4/8/PPPPPPPP/1RBQKBNR w Kk - 0 5"></td>
 <td valign="top" width="300">
 <h3>YOUR MOVE.</h3>
 <sub>you play white vs stockfish · click a move, then <b>Create</b></sub><br>
-<sub><a href="https://github.com/2md55nmxkw-arch">@2md55nmxkw-arch</a> <code>Nxa7</code> <img src="chess/icons/mistake.png" width="14" height="14" alt="mistake" title="? mistake"> mistake · stockfish <code>Rxa7</code> <img src="chess/icons/book.png" width="14" height="14" alt="book" title="book move"> book</sub><br>
+<sub><a href="https://github.com/2md55nmxkw-arch">@2md55nmxkw-arch</a> <code>Nxa7</code> <img src="chess/icons/mistake.png" width="14" height="14" alt="mistake" title="? mistake"> mistake · stockfish <code>Rxa7</code> <img src="chess/icons/best.png" width="14" height="14" alt="best" title="★ best move"> best</sub><br>
 <br>
 ♖︎&nbsp; <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=chess%7Cmove%7Cb1a1&body=Just+press+**Create**%2C+stockfish+answers+and+the+board+on+the+profile+updates+in+about+a+minute.%0A%0APlease+don%27t+change+the+title.">Ra1</a><br>
 ♘︎&nbsp; <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=chess%7Cmove%7Cg1f3&body=Just+press+**Create**%2C+stockfish+answers+and+the+board+on+the+profile+updates+in+about+a+minute.%0A%0APlease+don%27t+change+the+title.">Nf3</a> <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=chess%7Cmove%7Cg1h3&body=Just+press+**Create**%2C+stockfish+answers+and+the+board+on+the+profile+updates+in+about+a+minute.%0A%0APlease+don%27t+change+the+title.">Nh3</a><br>
@@ -43,14 +43,14 @@
 
 | # | move | | by |
 | --: | :-- | :-: | :-- |
-| 4… | `Rxa7` | <img src="chess/icons/book.png" width="14" height="14" alt="book" title="book move"> | stockfish |
+| 4… | `Rxa7` | <img src="chess/icons/best.png" width="14" height="14" alt="best" title="★ best move"> | stockfish |
 | 4. | `Nxa7` | <img src="chess/icons/mistake.png" width="14" height="14" alt="mistake" title="? mistake"> | [@2md55nmxkw-arch](https://github.com/2md55nmxkw-arch) |
-| 3… | `d4` | <img src="chess/icons/book.png" width="14" height="14" alt="book" title="book move"> | stockfish |
-| 3. | `Nb5` | <img src="chess/icons/book.png" width="14" height="14" alt="book" title="book move"> | [@2md55nmxkw-arch](https://github.com/2md55nmxkw-arch) |
-| 2… | `e5` |  | stockfish |
-| 2. | `Rb1` |  | [@2md55nmxkw-arch](https://github.com/2md55nmxkw-arch) |
-| 1… | `d5` |  | stockfish |
-| 1. | `Na3` |  | [@2md55nmxkw-arch](https://github.com/2md55nmxkw-arch) |
+| 3… | `d4` | <img src="chess/icons/good.png" width="14" height="14" alt="good" title="✓ good"> | stockfish |
+| 3. | `Nb5` | <img src="chess/icons/inaccuracy.png" width="14" height="14" alt="inaccuracy" title="?! inaccuracy"> | [@2md55nmxkw-arch](https://github.com/2md55nmxkw-arch) |
+| 2… | `e5` | <img src="chess/icons/best.png" width="14" height="14" alt="best" title="★ best move"> | stockfish |
+| 2. | `Rb1` | <img src="chess/icons/mistake.png" width="14" height="14" alt="mistake" title="? mistake"> | [@2md55nmxkw-arch](https://github.com/2md55nmxkw-arch) |
+| 1… | `d5` | <img src="chess/icons/book.png" width="14" height="14" alt="book" title="book move"> | stockfish |
+| 1. | `Na3` | <img src="chess/icons/book.png" width="14" height="14" alt="book" title="book move"> | [@2md55nmxkw-arch](https://github.com/2md55nmxkw-arch) |
 
 | player | moves |
 | :-- | --: |

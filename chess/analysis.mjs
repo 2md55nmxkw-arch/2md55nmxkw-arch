@@ -1,6 +1,7 @@
 // Классификация ходов в духе chess.com: по потере «ожидаемых очков» (вероятности выигрыша)
 // относительно лучшего хода движка, плюс great (единственный хороший ход) и brilliant (работающая жертва).
 import { Chess } from 'chess.js';
+import { isBook } from './book.mjs';
 
 const VAL = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 // вероятность выигрыша по кривой lichess — мягче к шуму оценки на малой глубине
@@ -24,8 +25,9 @@ function sacrifice(fen, uci, pvAfter = []) {
 /**
  * fen  — позиция до хода; uci — сыгранный ход
  * pre  — analyse(fen) (MultiPV 2), post — analyse(позиции после хода) или null, если партия закончилась
+ * history — SAN всех ходов партии до этого хода включительно (для книги дебютов)
  */
-export function classify(fen, uci, pre, post) {
+export function classify(fen, uci, pre, post, history = []) {
   const c = new Chess(fen);
   if (c.moves().length === 1) return 'forced';
   const ply = (Number(fen.split(' ')[5]) - 1) * 2 + (c.turn() === 'b' ? 1 : 0);
@@ -36,7 +38,8 @@ export function classify(fen, uci, pre, post) {
   const wBest = wp(best.score), wAfter = wp(after), loss = Math.max(0, wBest - wAfter);
   let cls = uci === best.pv[0] || loss <= 0.005 ? 'best'
     : loss < 0.02 ? 'excellent' : loss < 0.06 ? 'good' : loss < 0.12 ? 'inaccuracy' : loss < 0.22 ? 'mistake' : 'blunder';
-  if (ply < 8 && loss < 0.12 && !c.isCheckmate()) return 'book'; // дебют: нормальные ходы — «книжные», как на chess.com
+  // дебют: ход из книги, либо первый ход стороны без явной ошибки — «книжный», как на chess.com
+  if (!c.isCheckmate() && (ply < 2 || (history.length && isBook(history) && loss < 0.15))) return 'book';
   if (cls === 'best' && second && wBest - wp(second.score) >= 0.15 && wAfter >= 0.3) cls = 'great';
   if (['best', 'great', 'excellent'].includes(cls) && wAfter >= 0.5 && !c.isGameOver() && sacrifice(fen, uci, post?.lines?.[0]?.pv)) cls = 'brilliant';
   return cls;
