@@ -1,9 +1,22 @@
 {
   "game": 1,
-  "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-  "moves": [],
-  "last": null,
-  "players": {},
+  "fen": "rnbqkbnr/pppppppp/8/8/8/N7/PPPPPPPP/R1BQKBNR b KQkq - 1 1",
+  "moves": [
+    {
+      "n": 1,
+      "san": "Na3",
+      "uci": "b1a3",
+      "by": "2md55nmxkw-arch",
+      "at": "2026-11-09T18:57:26.079Z"
+    }
+  ],
+  "last": {
+    "from": "b1",
+    "to": "a3"
+  },
+  "players": {
+    "2md55nmxkw-arch": 1
+  },
   "games": [],
   "notice": null
 }
