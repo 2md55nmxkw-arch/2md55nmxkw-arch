@@ -4,7 +4,7 @@
 //   • руки   — source/gen/hand_{top,bottom,right}.png на зелёном фоне (ключуются здесь)
 // Монтаж — по сетке бита (~0.45 с), 20 fps. Кадры квантуются в общую палитру и пишутся в GIF.
 //
-//   node render/game.mjs                -> assets/header.gif + assets/header-static.png
+//   node render/game.mjs                -> assets/chess-header.gif + assets/chess-header-static.png
 //   SCALE=2 node render/game.mjs        -> чётче на retina, но GIF ≈ 6 МБ
 //   SHEET=path.png node render/game.mjs -> ещё и лист ключевых кадров
 
@@ -672,14 +672,14 @@ for (let f = 0; f < FRAMES; f++) {
 gif.finish();
 
 fs.mkdirSync(path.join(ROOT, 'assets'), { recursive: true });
-const gifPath = path.join(ROOT, 'assets', 'header.gif');
+const gifPath = path.join(ROOT, 'assets', 'chess-header.gif');
 fs.writeFileSync(gifPath, gif.bytes());
-console.log(`header.gif  ${WP}x${HP}  ${FRAMES}f @${1000 / DELAY}fps  ${(fs.statSync(gifPath).size / 1024 / 1024).toFixed(2)} MB  ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+console.log(`chess-header.gif  ${WP}x${HP}  ${FRAMES}f @${1000 / DELAY}fps  ${(fs.statSync(gifPath).size / 1024 / 1024).toFixed(2)} MB  ${((Date.now() - t0) / 1000).toFixed(1)}s`);
 if (sceneSizes.length) console.log('per scene KB (flick/pawn/wall/queen/king/title/lineup):', sceneSizes.map((v, i) => Math.round((v - (sceneSizes[i - 1] ?? 0)) / 1024)).join(' / '));
 
 { // статичный кадр для prefers-reduced-motion
   const c = createCanvas(WP, HP); c.getContext('2d').putImageData(staticImg, 0, 0);
-  fs.writeFileSync(path.join(ROOT, 'assets', 'header-static.png'), c.toBuffer('image/png'));
+  fs.writeFileSync(path.join(ROOT, 'assets', 'chess-header-static.png'), c.toBuffer('image/png'));
 }
 if (process.env.SHEET) {
   const cols = 2, sw = WP / 2, sh = HP / 2, rows = Math.ceil(sheet.length / cols);

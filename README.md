@@ -1,7 +1,7 @@
 <!--
   Шапка рендерится canvas'ом офлайн (GitHub не исполняет JS в README):
     npm i
-    npm run build        # render/game.mjs -> assets/header.gif + assets/header-static.png
+    npm run build        # render/game.mjs -> assets/chess-header.gif + assets/chess-header-static.png
   Спрайты фигур уже лежат в source/sprites/. Перерендерить их из 3D-модели
   (source/chess_set/, «Chess Set» с polyhaven.com/a/chess_set, CC0):
     npm run sprites      # и открыть http://localhost:5178
@@ -9,8 +9,8 @@
 -->
 
 <picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/header-static.png">
-  <img src="./assets/header.gif" width="100%" alt="2md55.arch — every piece was a pawn once. Reverse engineering, Unity IL2CPP, Luau. Stack: C++, Luau, Lua, TypeScript, Python.">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/chess-header-static.png">
+  <img src="./assets/chess-header.gif" width="100%" alt="2md55.arch — every piece was a pawn once. Reverse engineering, Unity IL2CPP, Luau. Stack: C++, Luau, Lua, TypeScript, Python.">
 </picture>
 
 <p align="center"><sub>
