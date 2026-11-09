@@ -43,28 +43,28 @@ function kingInCheck(chess) {
 // ───────── README ─────────
 function section(state, chess, img) {
   const turn = chess.turn(), last = state.moves.at(-1);
-  const L = ['<!-- chess:start -->', '<h3 align="center">YOUR MOVE.</h3>',
-    '<p align="center"><sub>an open game anyone can play: pick a move below, press <b>Create</b> on the issue that opens, and the board updates in about a minute</sub></p>',
-    `<p align="center"><img src="chess/${img}" width="480" alt="Chess board, game ${state.game}. Position (FEN): ${state.fen}"></p>`];
-  let status = `<b>${side(turn)}</b> to move · move ${chess.moveNumber()}`;
-  if (chess.inCheck()) status += ' · <b>check!</b>';
-  if (last) status += ` · last <code>${last.san}</code> by <a href="https://github.com/${last.by}">@${last.by}</a>`;
-  L.push(`<p align="center">${status}</p>`);
-  if (state.notice) L.push(`<p align="center"><sub>${state.notice}</sub></p>`);
-  L.push('');
+  const a = (href, text) => `<a href="${href}">${text}</a>`;
 
-  // ходы, сгруппированные по фигуре
-  const order = 'kqrbnp', groups = new Map();
+  // правая колонка: статус и ходы — одна строка на тип фигуры, ссылки в нотации (Nf6, exd5, O-O)
+  const R = [`<h3>YOUR MOVE.</h3>`, `<b>${side(turn)}</b> to move · move ${chess.moveNumber()}${chess.inCheck() ? ' · <b>check!</b>' : ''}<br>`];
+  if (last) R.push(`<sub>last <code>${last.san}</code> by ${a(`https://github.com/${last.by}`, '@' + last.by)}</sub><br>`);
+  if (state.notice) R.push(`<sub>${state.notice}</sub><br>`);
+  R.push('<br>');
+  const order = 'kqrbnp', byType = new Map();
   for (const m of chess.moves({ verbose: true })) {
-    if (!groups.has(m.from)) groups.set(m.from, { piece: m.piece, from: m.from, list: [] });
-    groups.get(m.from).list.push(m);
+    if (!byType.has(m.piece)) byType.set(m.piece, []);
+    byType.get(m.piece).push(m);
   }
-  L.push(`| ${side(turn)} | moves |`, '| :-: | :-- |');
-  for (const g of [...groups.values()].sort((a, b) => order.indexOf(a.piece) - order.indexOf(b.piece) || a.from.localeCompare(b.from))) {
-    const links = g.list.map(m => `[${m.to}${m.promotion ? '=' + m.promotion.toUpperCase() : ''}](${moveUrl(m.from + m.to + (m.promotion ?? ''))})`);
-    L.push(`| ${glyph(turn, g.piece)} ${g.from} | ${links.join(' · ')} |`);
+  for (const [t, ms] of [...byType.entries()].sort((x, y) => order.indexOf(x[0]) - order.indexOf(y[0]))) {
+    ms.sort((p, q) => p.to.localeCompare(q.to) || p.from.localeCompare(q.from));
+    R.push(`${glyph(turn, t)}&nbsp; ${ms.map(m => a(moveUrl(m.from + m.to + (m.promotion ?? '')), m.san)).join(' ')}<br>`);
   }
-  L.push('', '<details><summary>moves · players · past games</summary>', '');
+  R.push('<br><sub>click a move, press <b>Create</b> on the issue that opens, the board updates in about a minute. anyone can play.</sub>');
+
+  const L = ['<!-- chess:start -->', '<table align="center"><tr>',
+    `<td><img src="chess/${img}" width="380" alt="Chess board, game ${state.game}. Position (FEN): ${state.fen}"></td>`,
+    `<td valign="top" width="320">\n${R.join('\n')}\n</td>`, '</tr></table>', ''];
+  L.push('<details><summary>moves · players · past games</summary>', '');
   if (state.moves.length) {
     L.push('| # | move | by |', '| --: | :-- | :-- |');
     for (const m of state.moves.slice(-10).reverse()) L.push(`| ${Math.ceil(m.n / 2)}${m.n % 2 ? '.' : '…'} | \`${m.san}\` | ${userLink(m.by)} |`);
@@ -166,6 +166,9 @@ if (process.argv[2] === '--reset') {
   const state = fresh();
   await publish(state);
   console.log('new game, state reset');
+} else if (process.argv[2] === '--render') { // перерисовать доску и README из текущего состояния
+  await publish(load());
+  console.log('re-rendered');
 } else {
   await play();
 }
