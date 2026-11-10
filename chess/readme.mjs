@@ -12,6 +12,7 @@ const README = path.join(ROOT, 'README.md');
 const ACTIVITY = path.join(ROOT, 'chess', 'activity.json');
 export const REPO = process.env.GITHUB_REPOSITORY || '2md55nmxkw-arch/2md55nmxkw-arch';
 export const ENGINE = 'stockfish';
+export const EMPTY_CARD = 'empty-2.webp'; // меняйте номер при перерисовке — мимо кеша картинок
 
 const GLYPH = { k: '♔', q: '♕', r: '♖', b: '♗', n: '♘', p: '♙' };
 const glyph = t => GLYPH[t] + '︎'; // текстовое начертание, а не эмодзи
@@ -53,7 +54,7 @@ function playCell(state, chess) {
 
 function hallCards(state) {
   const hall = state.hall ?? [];
-  if (!hall.length) return ['<img src="chess/hall/empty.webp" width="340" alt="Nobody has checkmated stockfish yet">'];
+  if (!hall.length) return ['<img src="chess/hall/${EMPTY_CARD}" width="340" alt="Nobody has checkmated stockfish yet">'];
   return [hall.slice(0, 2).map(h => a(`https://github.com/${h.user}`,
     `<img src="chess/hall/${h.img}" width="340" alt="@${h.user} checkmated stockfish in game ${h.game}">`, `@${h.user}`)).join('<br>\n')];
 }

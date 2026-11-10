@@ -15,7 +15,7 @@ import { engineMove, analyse } from './engine.mjs';
 import { classify } from './analysis.mjs';
 import { BADGE } from './badges.mjs';
 import { renderTrophy, renderEmptyTrophy } from './trophy.mjs';
-import { writeReadme, who, ENGINE, REPO } from './readme.mjs';
+import { writeReadme, who, ENGINE, REPO, EMPTY_CARD } from './readme.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = path.join(ROOT, 'chess');
@@ -54,7 +54,10 @@ async function publish(state) {
   state.img = `board-${state.game}-${state.moves.length}-${createHash('sha1').update(buf).digest('hex').slice(0, 6)}.webp`;
   fs.writeFileSync(path.join(DIR, state.img), buf);
   fs.mkdirSync(HALL, { recursive: true });
-  if (!fs.existsSync(path.join(HALL, 'empty.webp'))) fs.writeFileSync(path.join(HALL, 'empty.webp'), await renderEmptyTrophy());
+  if (!fs.existsSync(path.join(HALL, EMPTY_CARD))) {
+    for (const f of fs.readdirSync(HALL)) if (/^empty.*\.webp$/.test(f)) fs.unlinkSync(path.join(HALL, f));
+    fs.writeFileSync(path.join(HALL, EMPTY_CARD), await renderEmptyTrophy());
+  }
   save(state);
   writeReadme(state, chess);
 }

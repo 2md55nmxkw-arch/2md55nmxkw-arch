@@ -28,7 +28,7 @@
 
 <br clear="left">
 
-<img src="chess/activity-2026-11-10.webp" width="400" align="left" alt="Last 64 days of GitHub activity as a chessboard: 52 contributions">
+<img src="chess/activity-2026-11-10-e0438a.webp" width="400" align="left" alt="Last 64 days of GitHub activity as a chessboard: 52 contributions">
 
 <img src="chess/titles/every-commit.png" width="264" height="68" alt="EVERY COMMIT IS A MOVE.">
 
@@ -36,7 +36,7 @@
 
 <img src="chess/titles/hall-of-mate.png" width="156" height="68" alt="HALL OF MATE. Checkmate stockfish to get your card here">
 
-<img src="chess/hall/empty.webp" width="340" alt="Nobody has checkmated stockfish yet">
+<img src="chess/hall/${EMPTY_CARD}" width="340" alt="Nobody has checkmated stockfish yet">
 
 <br clear="left">
 

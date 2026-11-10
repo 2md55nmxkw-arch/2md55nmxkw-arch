@@ -6,6 +6,7 @@ import { Chess } from 'chess.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { renderBoard } from './board.mjs';
 import { writeReadme, REPO } from './readme.mjs';
 
@@ -41,8 +42,9 @@ days.forEach((d, i) => {
 });
 const todaySq = 'abcdefgh'[(days.length - 1) % 8] + (Math.floor((days.length - 1) / 8) + 1);
 for (const f of fs.readdirSync(DIR)) if (/^activity-.*\.webp$/.test(f)) fs.unlinkSync(path.join(DIR, f));
-const img = `activity-${days.at(-1).date}.webp`;
-fs.writeFileSync(path.join(DIR, img), await renderBoard({ board, last: null, bar: false, barSpace: true, highlight: [todaySq] }));
+const buf = await renderBoard({ board, last: null, bar: false, barSpace: true, highlight: [todaySq] });
+const img = `activity-${days.at(-1).date}-${createHash('sha1').update(buf).digest('hex').slice(0, 6)}.webp`; // мимо кеша картинок
+fs.writeFileSync(path.join(DIR, img), buf);
 const total = days.reduce((s, d) => s + d.count, 0);
 fs.writeFileSync(path.join(DIR, 'activity.json'), JSON.stringify({ img, total, from: days[0].date, to: days.at(-1).date }, null, 2) + '\n');
 
