@@ -12,7 +12,7 @@
     }
   ],
   "game": 2,
-  "fen": "r4knr/1b1p1pp1/1pNb4/p2P3p/2P2P2/2N2QP1/PPB4P/2K1R3 w - - 1 19",
+  "fen": "r4knr/3p1pp1/bpNb4/p2P3p/2P1NP2/5QP1/PPB4P/2K1R3 w - - 3 20",
   "moves": [
     {
       "n": 1,
@@ -337,14 +337,32 @@
       "by": "stockfish",
       "cls": "best",
       "at": "2026-11-10T14:21:13.010Z"
+    },
+    {
+      "n": 37,
+      "san": "Ne4",
+      "uci": "c3e4",
+      "to": "e4",
+      "by": "2md55nmxkw-arch",
+      "cls": "best",
+      "at": "2026-11-10T14:21:39.057Z"
+    },
+    {
+      "n": 38,
+      "san": "Ba6",
+      "uci": "b7a6",
+      "to": "a6",
+      "by": "stockfish",
+      "cls": "excellent",
+      "at": "2026-11-10T14:21:40.233Z"
     }
   ],
   "last": {
-    "from": "e8",
-    "to": "f8"
+    "from": "b7",
+    "to": "a6"
   },
   "players": {
-    "2md55nmxkw-arch": 42,
+    "2md55nmxkw-arch": 43,
     "MedakhmetAsylmurat": 2
   },
   "games": [
@@ -360,8 +378,8 @@
   ],
   "notice": null,
   "eval": {
-    "cp": 1095
+    "cp": 1287
   },
-  "img": "board-2-36-3676a9.webp",
+  "img": "board-2-38-4a455f.webp",
   "finalImg": "final-1.webp"
 }
