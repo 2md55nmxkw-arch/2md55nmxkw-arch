@@ -36,7 +36,7 @@
 
 <img src="chess/titles/hall-of-mate.png" width="156" height="68" alt="HALL OF MATE. Checkmate stockfish to get your card here">
 
-<img src="chess/hall/${EMPTY_CARD}" width="340" alt="Nobody has checkmated stockfish yet">
+<img src="chess/hall/empty-2.webp" width="340" alt="Nobody has checkmated stockfish yet">
 
 <br clear="left">
 
