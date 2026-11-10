@@ -34,22 +34,17 @@
   "material": [
     {
       "name": "C++",
-      "pct": 40,
+      "pct": 50,
       "color": "#f34b7d"
     },
     {
       "name": "Luau",
-      "pct": 26,
+      "pct": 31,
       "color": "#00A2FF"
     },
     {
-      "name": "TypeScript",
-      "pct": 20,
-      "color": "#3178c6"
-    },
-    {
       "name": "JavaScript",
-      "pct": 14,
+      "pct": 19,
       "color": "#f1e05a"
     }
   ]
