@@ -2,8 +2,8 @@
 <rect x="0.5" y="13.5" width="377" height="377" rx="6" fill="none" stroke="#d0d7de"/>
 <path d="M189 13.5V390.5M0.5 202H377.5" stroke="#d0d7de"/>
 <text x="14.5" y="39.5" font-size="12" fill="#1f2328" font-weight="600">Score vs stockfish</text>
-<text x="175" y="39.5" font-size="11" fill="#656d76" text-anchor="end">game 2</text>
-<text x="31.9" y="87.5" font-size="26" fill="#1a7f37" font-weight="600" text-anchor="middle">1</text>
+<text x="175" y="39.5" font-size="11" fill="#656d76" text-anchor="end">game 3</text>
+<text x="31.9" y="87.5" font-size="26" fill="#1a7f37" font-weight="600" text-anchor="middle">2</text>
 <text x="31.9" y="105.5" font-size="11" fill="#656d76" text-anchor="middle">won</text>
 <text x="94.8" y="87.5" font-size="26" fill="#1f2328" font-weight="600" text-anchor="middle">0</text>
 <text x="94.8" y="105.5" font-size="11" fill="#656d76" text-anchor="middle">drawn</text>
@@ -11,11 +11,11 @@
 <text x="157.6" y="105.5" font-size="11" fill="#656d76" text-anchor="middle">lost</text>
 <path d="M14.5 122H175" stroke="#d0d7de"/>
 <text x="14.5" y="143.5" font-size="11.5" fill="#656d76">moves</text>
-<text x="175" y="143.5" font-size="11.5" fill="#1f2328" text-anchor="end">53</text>
+<text x="175" y="143.5" font-size="11.5" fill="#1f2328" text-anchor="end">54</text>
 <text x="14.5" y="163.5" font-size="11.5" fill="#656d76">players</text>
 <text x="175" y="163.5" font-size="11.5" fill="#1f2328" text-anchor="end">2</text>
 <text x="14.5" y="183.5" font-size="11.5" fill="#656d76">won by</text>
-<text x="175" y="183.5" font-size="11.5" fill="#1f2328" text-anchor="end">@2md55nmxkw-arch</text>
+<text x="175" y="183.5" font-size="11.5" fill="#1f2328" text-anchor="end">@2md55nmxkw-a… +1</text>
 <text x="203" y="39.5" font-size="12" fill="#1f2328" font-weight="600">Pieces on the board</text>
 <text x="363.5" y="39.5" font-size="11" fill="#656d76" text-anchor="end">★ 8</text>
 <text x="203" y="67.5" font-size="13" fill="#656d76">♔</text>
