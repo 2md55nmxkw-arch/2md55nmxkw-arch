@@ -4,7 +4,7 @@
   ],
   "hall": [],
   "game": 1,
-  "fen": "1n1qkbnr/1pp2ppp/8/3b4/3p4/5N2/1PPP1PPP/R1BQK2R w Kk - 0 11",
+  "fen": "1n1qkbnr/1pp2ppp/4b3/8/3p4/5N2/1PPPQPPP/R1B1K2R w Kk - 2 12",
   "moves": [
     {
       "n": 1,
@@ -181,19 +181,37 @@
       "by": "stockfish",
       "cls": "best",
       "at": "2026-11-10T06:05:59.507Z"
+    },
+    {
+      "n": 21,
+      "san": "Qe2+",
+      "uci": "d1e2",
+      "to": "e2",
+      "by": "2md55nmxkw-arch",
+      "cls": "inaccuracy",
+      "at": "2026-11-10T06:06:15.065Z"
+    },
+    {
+      "n": 22,
+      "san": "Be6",
+      "uci": "d5e6",
+      "to": "e6",
+      "by": "stockfish",
+      "cls": "mistake",
+      "at": "2026-11-10T06:06:16.456Z"
     }
   ],
   "last": {
-    "from": "e5",
-    "to": "d4"
+    "from": "d5",
+    "to": "e6"
   },
   "players": {
-    "2md55nmxkw-arch": 10
+    "2md55nmxkw-arch": 11
   },
   "games": [],
   "notice": null,
   "eval": {
-    "cp": -129
+    "cp": -53
   },
-  "img": "board-1-20-30a966.webp"
+  "img": "board-1-22-550805.webp"
 }
