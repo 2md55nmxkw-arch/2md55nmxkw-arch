@@ -1,0 +1,56 @@
+{
+  "projects": [
+    {
+      "name": "endfield-il2dump",
+      "url": "https://github.com/2md55nmxkw-arch/endfield-il2dump",
+      "stars": 3,
+      "piece": "k"
+    },
+    {
+      "name": "Loliland-ModLoader",
+      "url": "https://github.com/2md55nmxkw-arch/Loliland-ModLoader",
+      "stars": 2,
+      "piece": "q"
+    },
+    {
+      "name": "LuauEmu",
+      "url": "https://github.com/2md55nmxkw-arch/LuauEmu",
+      "stars": 1,
+      "piece": "r"
+    },
+    {
+      "name": "WindUI",
+      "url": "https://github.com/2md55nmxkw-arch/WindUI",
+      "stars": 1,
+      "piece": "b"
+    },
+    {
+      "name": "2md55nmxkw-arch.github.io",
+      "url": "https://github.com/2md55nmxkw-arch/2md55nmxkw-arch.github.io",
+      "stars": 1,
+      "piece": "n"
+    }
+  ],
+  "material": [
+    {
+      "name": "C++",
+      "pct": 40,
+      "color": "#f34b7d"
+    },
+    {
+      "name": "Luau",
+      "pct": 26,
+      "color": "#00A2FF"
+    },
+    {
+      "name": "TypeScript",
+      "pct": 20,
+      "color": "#3178c6"
+    },
+    {
+      "name": "JavaScript",
+      "pct": 14,
+      "color": "#f1e05a"
+    }
+  ]
+}

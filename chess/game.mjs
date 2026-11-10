@@ -3,7 +3,7 @@
 //   node chess/game.mjs            — обработать ход (env: ISSUE_TITLE, ISSUE_USER), запускается из GitHub Actions
 //   node chess/game.mjs --render   — перерисовать доску и README из текущего состояния
 //   node chess/game.mjs --reset    — начать всё с нуля
-// Результат: chess/state.json, chess/board-*.webp, chess/hall/*.webp, секция README,
+// Результат: chess/state.json, chess/board-*.webp и chess/panel-*.svg (в тёмной и светлой теме), секция README,
 // текст ответа в chess/.comment.md и outputs result=ok|rejected, move=… для workflow.
 import { Chess } from 'chess.js';
 import fs from 'node:fs';
@@ -14,12 +14,12 @@ import { renderBoard } from './board.mjs';
 import { engineMove, analyse } from './engine.mjs';
 import { classify } from './analysis.mjs';
 import { BADGE } from './badges.mjs';
-import { renderTrophy, renderEmptyTrophy } from './trophy.mjs';
-import { writeReadme, who, ENGINE, REPO, EMPTY_CARD } from './readme.mjs';
+import { writePanel } from './panel.mjs';
+import { lightName } from './theme.mjs';
+import { writeReadme, who, ENGINE, REPO } from './readme.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = path.join(ROOT, 'chess');
-const HALL = path.join(DIR, 'hall');
 const STATE_FILE = path.join(DIR, 'state.json');
 const COMMENT = path.join(DIR, '.comment.md');
 const PROFILE = `https://github.com/${REPO.split('/')[0]}`;
@@ -49,15 +49,13 @@ function marks(state) {
 async function publish(state) {
   const chess = new Chess(state.fen);
   clean(/^board-.*\.webp$/);
-  const buf = await renderBoard({ board: chess.board(), last: state.last, check: kingInCheck(chess), score: state.eval, marks: marks(state) });
+  const view = { board: chess.board(), last: state.last, check: kingInCheck(chess), score: state.eval, marks: marks(state) };
+  const buf = await renderBoard(view);
   // имя меняется вместе с содержимым картинки — мимо кеша GitHub и браузеров
   state.img = `board-${state.game}-${state.moves.length}-${createHash('sha1').update(buf).digest('hex').slice(0, 6)}.webp`;
   fs.writeFileSync(path.join(DIR, state.img), buf);
-  fs.mkdirSync(HALL, { recursive: true });
-  if (!fs.existsSync(path.join(HALL, EMPTY_CARD))) {
-    for (const f of fs.readdirSync(HALL)) if (/^empty.*\.webp$/.test(f)) fs.unlinkSync(path.join(HALL, f));
-    fs.writeFileSync(path.join(HALL, EMPTY_CARD), await renderEmptyTrophy());
-  }
+  fs.writeFileSync(path.join(DIR, lightName(state.img)), await renderBoard({ ...view, theme: 'light' }));
+  writePanel(state); // счёт в панели меняется с каждым ходом
   save(state);
   writeReadme(state, chess);
 }
@@ -73,18 +71,17 @@ async function finish(state, chess, mv, by) {
     : chess.isThreefoldRepetition() ? 'threefold repetition' : chess.isInsufficientMaterial() ? 'insufficient material' : '50-move rule';
   clean(/^final-.*\.webp$/);
   const finalImg = `final-${state.game}.webp`;
-  fs.writeFileSync(path.join(DIR, finalImg), await renderBoard({
+  const view = {
     board: chess.board(), last: state.last, check: kingInCheck(chess), marks: marks(state),
     score: chess.isCheckmate() ? { mate: mv.color === 'w' ? 1 : -1 } : { cp: 0 },
-  }));
+  };
+  fs.writeFileSync(path.join(DIR, finalImg), await renderBoard(view));
+  fs.writeFileSync(path.join(DIR, lightName(finalImg)), await renderBoard({ ...view, theme: 'light' }));
   const games = [{ game: state.game, result, reason, plies: state.moves.length, final: mv.san, by, at: new Date().toISOString() }, ...state.games];
   let hall = state.hall, extra = '';
   if (result === '1-0' && by !== ENGINE) { // мат движку — в зал славы
-    fs.mkdirSync(HALL, { recursive: true });
-    const img = `${state.game}-${by}.webp`;
-    fs.writeFileSync(path.join(HALL, img), await renderTrophy({ user: by, game: state.game, plies: state.moves.length }));
-    hall = [{ user: by, game: state.game, plies: state.moves.length, img, at: new Date().toISOString() }, ...hall];
-    extra = '\n\n👑 You checkmated stockfish. Your card is now in the Hall of Mate on the profile.';
+    hall = [{ user: by, game: state.game, plies: state.moves.length, at: new Date().toISOString() }, ...hall];
+    extra = '\n\n👑 You checkmated stockfish. You are now in the Hall of Mate on the profile.';
   }
   const notice = result === '1-0' ? `game ${state.game}: ${who(by)} checkmated stockfish 👑` : result === '0-1' ? `game ${state.game}: stockfish won · new game` : `game ${state.game}: draw by ${reason}`;
   Object.assign(state, fresh(state.game + 1, { players: state.players, recent: state.recent, games, hall, notice, finalImg }));

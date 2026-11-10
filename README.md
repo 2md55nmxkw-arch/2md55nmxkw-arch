@@ -14,9 +14,14 @@
 </picture>
 
 <!-- chess:start -->
-<img src="chess/board-1-8-f70e19.webp" width="400" align="left" alt="Chess board, game 1. Position (FEN): 1nbqkbnr/rpp2ppp/8/4p3/3p4/8/PPPPPPPP/1RBQKBNR w Kk - 0 5">
+I take games and runtimes apart, then write the tools I wanted to have: an offline IL2CPP dumper, a mod loader, a Luau emulator.<br>
+Mostly C++ and Luau, with TypeScript around the edges.
 
-<img src="chess/titles/your-move.png" width="200" height="68" alt="YOUR MOVE. You play white vs stockfish: click a move, then Create">
+♙︎&nbsp; <a href="https://2md55nmxkw-arch.github.io">site</a>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="chess/board-1-8-f10cbe.webp"><source media="(prefers-color-scheme: light)" srcset="chess/board-1-8-f10cbe-light.webp"><img src="chess/board-1-8-f10cbe.webp" width="53%" alt="Chess board, game 1. Position (FEN): 1nbqkbnr/rpp2ppp/8/4p3/3p4/8/PPPPPPPP/1RBQKBNR w Kk - 0 5"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="chess/panel-ae51b3.svg"><source media="(prefers-color-scheme: light)" srcset="chess/panel-ae51b3-light.svg"><img src="chess/panel-ae51b3.svg" width="46.9%" alt="Score vs stockfish: 0 won, 0 drawn, 0 lost; 4 moves by 1 player. Pieces on the board: endfield-il2dump (3 stars), Loliland-ModLoader (2 stars), LuauEmu (1 stars), WindUI (1 stars), 2md55nmxkw-arch.github.io (1 stars). Every commit is a move: 59 contributions in the last 64 days. Material by code size: C++ 40%, Luau 26%, TypeScript 20%, JavaScript 14%."></picture>
+
+**Your move.** You play white vs stockfish: click a move, then press Create.
 
 <sub><a href="https://github.com/2md55nmxkw-arch">@2md55nmxkw-arch</a> <code>Nxa7</code> <img src="chess/icons/mistake.png" width="14" height="14" alt="mistake" title="? mistake"> mistake · stockfish <code>Rxa7</code> <img src="chess/icons/best.png" width="14" height="14" alt="best" title="★ best move"> best</sub>
 
@@ -26,19 +31,7 @@
 
 <a href="https://github.com/2md55nmxkw-arch" title="@2md55nmxkw-arch"><img src="https://github.com/2md55nmxkw-arch.png?size=64" width="26" height="26" alt="@2md55nmxkw-arch"></a>
 
-<br clear="left">
-
-<img src="chess/activity-2026-11-10-e0438a.webp" width="400" align="left" alt="Last 64 days of GitHub activity as a chessboard: 52 contributions">
-
-<img src="chess/titles/every-commit.png" width="264" height="68" alt="EVERY COMMIT IS A MOVE.">
-
-<sub>52 contributions · today is the highlighted square</sub>
-
-<img src="chess/titles/hall-of-mate.png" width="156" height="68" alt="HALL OF MATE. Checkmate stockfish to get your card here">
-
-<img src="chess/hall/empty-2.webp" width="340" alt="Nobody has checkmated stockfish yet">
-
-<br clear="left">
+<sub>♔︎ <a href="https://github.com/2md55nmxkw-arch/endfield-il2dump">endfield-il2dump</a> · ♕︎ <a href="https://github.com/2md55nmxkw-arch/Loliland-ModLoader">Loliland-ModLoader</a> · ♖︎ <a href="https://github.com/2md55nmxkw-arch/LuauEmu">LuauEmu</a> · ♗︎ <a href="https://github.com/2md55nmxkw-arch/WindUI">WindUI</a> · ♘︎ <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch.github.io">2md55nmxkw-arch.github.io</a></sub>
 
 <div align="center"><details><summary><sub>history</sub></summary>
 

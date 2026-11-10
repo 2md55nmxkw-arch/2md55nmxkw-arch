@@ -1,0 +1,17 @@
+{
+  "about": [
+    "I take games and runtimes apart, then write the tools I wanted to have: an offline IL2CPP dumper, a mod loader, a Luau emulator.",
+    "Mostly C++ and Luau, with TypeScript around the edges."
+  ],
+  "links": [
+    { "label": "site", "url": "https://2md55nmxkw-arch.github.io" }
+  ],
+  "projects": {
+    "max": 6,
+    "hide": []
+  },
+  "material": {
+    "skipRepos": ["2md55nmxkw-arch"],
+    "skipLanguages": ["HTML", "CSS", "SCSS", "Batchfile", "CMake", "Makefile", "Shell", "Dockerfile"]
+  }
+}

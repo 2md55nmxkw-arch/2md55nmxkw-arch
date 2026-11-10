@@ -87,5 +87,11 @@
   "eval": {
     "cp": -481
   },
-  "img": "board-1-8-f70e19.webp"
+  "img": "board-1-8-f10cbe.webp",
+  "scoreImg": "score-dc3dde.webp",
+  "label": {
+    "img": "label-211e88.webp",
+    "w": 243,
+    "h": 55
+  }
 }
