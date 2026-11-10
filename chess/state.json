@@ -1,5 +1,6 @@
 {
   "recent": [
+    "MedakhmetAsylmurat",
     "2md55nmxkw-arch"
   ],
   "hall": [
@@ -11,11 +12,34 @@
     }
   ],
   "game": 2,
-  "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-  "moves": [],
-  "last": null,
+  "fen": "r1bqkbnr/pppppppp/2n5/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 1 2",
+  "moves": [
+    {
+      "n": 1,
+      "san": "c4",
+      "uci": "c2c4",
+      "to": "c4",
+      "by": "MedakhmetAsylmurat",
+      "cls": "book",
+      "at": "2026-11-10T12:17:54.530Z"
+    },
+    {
+      "n": 2,
+      "san": "Nc6",
+      "uci": "b8c6",
+      "to": "c6",
+      "by": "stockfish",
+      "cls": "book",
+      "at": "2026-11-10T12:17:56.018Z"
+    }
+  ],
+  "last": {
+    "from": "b8",
+    "to": "c6"
+  },
   "players": {
-    "2md55nmxkw-arch": 26
+    "2md55nmxkw-arch": 26,
+    "MedakhmetAsylmurat": 1
   },
   "games": [
     {
@@ -28,10 +52,10 @@
       "at": "2026-11-10T06:12:16.405Z"
     }
   ],
-  "notice": "game 1: <a href=\"https://github.com/2md55nmxkw-arch\">@2md55nmxkw-arch</a> checkmated stockfish 👑",
+  "notice": null,
   "eval": {
-    "cp": 65
+    "cp": 38
   },
-  "img": "board-2-0-87b3c0.webp",
+  "img": "board-2-2-a1372d.webp",
   "finalImg": "final-1.webp"
 }
