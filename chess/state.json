@@ -18,11 +18,33 @@
     }
   ],
   "game": 3,
-  "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-  "moves": [],
-  "last": null,
+  "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+  "moves": [
+    {
+      "n": 1,
+      "san": "e4",
+      "uci": "e2e4",
+      "to": "e4",
+      "by": "2md55nmxkw-arch",
+      "cls": "book",
+      "at": "2026-11-10T16:31:49.833Z"
+    },
+    {
+      "n": 2,
+      "san": "c6",
+      "uci": "c7c6",
+      "to": "c6",
+      "by": "stockfish",
+      "cls": "book",
+      "at": "2026-11-10T16:31:51.119Z"
+    }
+  ],
+  "last": {
+    "from": "c7",
+    "to": "c6"
+  },
   "players": {
-    "2md55nmxkw-arch": 52,
+    "2md55nmxkw-arch": 53,
     "MedakhmetAsylmurat": 2
   },
   "games": [
@@ -45,10 +67,10 @@
       "at": "2026-11-10T06:12:16.405Z"
     }
   ],
-  "notice": "game 2: <a href=\"https://github.com/2md55nmxkw-arch\">@2md55nmxkw-arch</a> checkmated stockfish 👑",
+  "notice": null,
   "eval": {
-    "cp": 65
+    "cp": 84
   },
-  "img": "board-3-0-87b3c0.webp",
+  "img": "board-3-2-a85c37.webp",
   "finalImg": "final-2.webp"
 }
