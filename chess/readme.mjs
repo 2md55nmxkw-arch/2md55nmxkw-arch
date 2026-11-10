@@ -25,40 +25,46 @@ export const moveUrl = uci => `https://github.com/${REPO}/issues/new?` + new URL
   body: 'Just press **Create**, stockfish answers and the board on the profile updates in about a minute.\n\nPlease don\'t change the title.',
 });
 
+const TITLE_META = JSON.parse(fs.readFileSync(path.join(ROOT, 'chess', 'titles', 'meta.json'), 'utf8'));
+const title = (name, alt) => `<img src="chess/titles/${name}.png" width="${TITLE_META[name].w}" height="${TITLE_META[name].h}" alt="${alt}">`;
+
 function playCell(state, chess) {
-  const R = ['<h3>YOUR MOVE.</h3>', '<sub>you play white vs stockfish · click a move, then <b>Create</b></sub><br>'];
+  const R = [title('your-move', 'YOUR MOVE. You play white vs stockfish: click a move, then Create'), ''];
   const [mine, theirs] = state.moves.slice(-2);
   const tag = m => `<code>${m.san}</code> ${icon(m.cls)} ${m.cls ?? ''}`;
-  if (theirs?.by === ENGINE && mine) R.push(`<sub>${who(mine.by)} ${tag(mine)} · stockfish ${tag(theirs)}${chess.inCheck() ? ' · check' : ''}</sub><br>`);
-  else if (state.notice) R.push(`<sub>${state.notice}</sub><br>`);
-  R.push('<br>');
+  if (theirs?.by === ENGINE && mine) R.push(`<sub>${who(mine.by)} ${tag(mine)} · stockfish ${tag(theirs)}${chess.inCheck() ? ' · check' : ''}</sub>`, '');
+  else if (state.notice) R.push(`<sub>${state.notice}</sub>`, '');
   const order = 'kqrbnp', byType = new Map();
   for (const m of chess.moves({ verbose: true })) {
     if (!byType.has(m.piece)) byType.set(m.piece, []);
     byType.get(m.piece).push(m);
   }
-  for (const [t, ms] of [...byType.entries()].sort((x, y) => order.indexOf(x[0]) - order.indexOf(y[0]))) {
+  const lines = [...byType.entries()].sort((x, y) => order.indexOf(x[0]) - order.indexOf(y[0])).map(([t, ms]) => {
     ms.sort((p, q) => p.to.localeCompare(q.to) || p.from.localeCompare(q.from));
-    R.push(`${glyph(t)}&nbsp; ${ms.map(m => a(moveUrl(m.from + m.to + (m.promotion ?? '')), m.san)).join(' ')}<br>`);
-  }
+    return `${glyph(t)}&nbsp; ${ms.map(m => a(moveUrl(m.from + m.to + (m.promotion ?? '')), m.san)).join(' ')}`;
+  });
+  R.push(lines.join('<br>\n'), '');
   if (state.recent?.length) {
-    R.push('<br>' + state.recent.slice(0, 10).map(u =>
-      a(`https://github.com/${u}`, `<img src="https://github.com/${u}.png?size=64" width="26" height="26" alt="@${u}">`, `@${u}`)).join(' '));
+    R.push(state.recent.slice(0, 10).map(u =>
+      a(`https://github.com/${u}`, `<img src="https://github.com/${u}.png?size=64" width="26" height="26" alt="@${u}">`, `@${u}`)).join(' '), '');
   }
-  return R.join('\n');
+  return R;
 }
 
-function hallCell(state) {
+function hallCards(state) {
   const hall = state.hall ?? [];
-  if (!hall.length) return '<img src="chess/hall/empty.webp" width="300" alt="Hall of mate: nobody has checkmated stockfish yet">';
-  return hall.slice(0, 2).map(h => a(`https://github.com/${h.user}`,
-    `<img src="chess/hall/${h.img}" width="300" alt="@${h.user} checkmated stockfish in game ${h.game}">`, `@${h.user}`)).join('<br>\n');
+  if (!hall.length) return ['<img src="chess/hall/empty.webp" width="340" alt="Nobody has checkmated stockfish yet">'];
+  return [hall.slice(0, 2).map(h => a(`https://github.com/${h.user}`,
+    `<img src="chess/hall/${h.img}" width="340" alt="@${h.user} checkmated stockfish in game ${h.game}">`, `@${h.user}`)).join('<br>\n')];
 }
 
-function activityCell() {
-  if (!fs.existsSync(ACTIVITY)) return '';
+function activityRows() {
+  if (!fs.existsSync(ACTIVITY)) return null;
   const act = JSON.parse(fs.readFileSync(ACTIVITY, 'utf8'));
-  return `<img src="chess/${act.img}" width="300" alt="Last 64 days of GitHub activity as a chessboard: ${act.total} contributions"><br>\n<sub>last 64 days · every commit is a move</sub>`;
+  return {
+    img: `<img src="chess/${act.img}" width="400" align="left" alt="Last 64 days of GitHub activity as a chessboard: ${act.total} contributions">`,
+    text: `<sub>${act.total} contributions · today is the highlighted square</sub>`,
+  };
 }
 
 function history(state) {
@@ -83,18 +89,18 @@ function history(state) {
   return D.length ? ['<div align="center"><details><summary><sub>history</sub></summary>', '', ...D, '</details></div>'] : [];
 }
 
+// Без таблиц (у GitHub у них рамки): картинка слева с обтеканием, справа содержимое, затем clear.
+// Оба ряда устроены одинаково, доски одной ширины — получается ровная сетка в стиле шапки.
 export function writeReadme(state, chess) {
-  const act = activityCell();
-  const L = ['<!-- chess:start -->', '<table align="center">',
-    '<tr>',
-    `<td align="center"><img src="chess/${state.img}" width="400" alt="Chess board, game ${state.game}. Position (FEN): ${state.fen}"></td>`,
-    `<td valign="top" width="300">\n${playCell(state, chess)}\n</td>`,
-    '</tr>',
-    '<tr>',
-    `<td align="center" valign="top">\n${act}\n</td>`,
-    `<td align="center" valign="top">\n${hallCell(state)}\n</td>`,
-    '</tr>',
-    '</table>', '', ...history(state), '<!-- chess:end -->'];
+  const act = activityRows();
+  const L = ['<!-- chess:start -->',
+    `<img src="chess/${state.img}" width="400" align="left" alt="Chess board, game ${state.game}. Position (FEN): ${state.fen}">`, '',
+    ...playCell(state, chess),
+    '<br clear="left">', ''];
+  if (act) L.push(act.img, '', title('every-commit', 'EVERY COMMIT IS A MOVE.'), '', act.text, '',
+    title('hall-of-mate', 'HALL OF MATE. Checkmate stockfish to get your card here'), '', ...hallCards(state), '', '<br clear="left">', '');
+  else L.push(title('hall-of-mate', 'HALL OF MATE.'), '', ...hallCards(state), '');
+  L.push(...history(state), '<!-- chess:end -->');
   const block = L.join('\n');
   let md = fs.readFileSync(README, 'utf8');
   const re = /<!-- chess:start -->[\s\S]*?<!-- chess:end -->/;

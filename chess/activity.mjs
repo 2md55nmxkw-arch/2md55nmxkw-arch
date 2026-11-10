@@ -42,7 +42,7 @@ days.forEach((d, i) => {
 const todaySq = 'abcdefgh'[(days.length - 1) % 8] + (Math.floor((days.length - 1) / 8) + 1);
 for (const f of fs.readdirSync(DIR)) if (/^activity-.*\.webp$/.test(f)) fs.unlinkSync(path.join(DIR, f));
 const img = `activity-${days.at(-1).date}.webp`;
-fs.writeFileSync(path.join(DIR, img), await renderBoard({ board, last: null, bar: false, highlight: [todaySq] }));
+fs.writeFileSync(path.join(DIR, img), await renderBoard({ board, last: null, bar: false, barSpace: true, highlight: [todaySq] }));
 const total = days.reduce((s, d) => s + d.count, 0);
 fs.writeFileSync(path.join(DIR, 'activity.json'), JSON.stringify({ img, total, from: days[0].date, to: days.at(-1).date }, null, 2) + '\n');
 

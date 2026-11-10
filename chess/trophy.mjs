@@ -79,11 +79,9 @@ export async function renderEmptyTrophy() {
   ctx.beginPath(); ctx.arc(120, 135, 82, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
   drawText(ctx, '?', 120, 114, { px: 6, color: '#484f58', align: 'center' });
   const X = 232;
-  crown(ctx, X, 40, 4, '#484f58');
-  drawText(ctx, 'HALL OF MATE', X, 76, { px: 3 });
-  drawText(ctx, 'NOBODY HAS', X, 112, { px: 3, color: GRAY });
-  drawText(ctx, 'BEATEN IT YET', X, 140, { px: 3, color: GRAY });
-  drawText(ctx, 'CHECKMATE STOCKFISH', X, 190, { px: 2, color: YEL });
-  drawText(ctx, 'TO GET YOUR CARD', X, 210, { px: 2, color: YEL });
+  crown(ctx, X, 52, 4, '#484f58');
+  drawText(ctx, 'NOBODY HAS', X, 92, { px: 3 });
+  drawText(ctx, 'BEATEN IT YET', X, 120, { px: 3 });
+  drawText(ctx, 'YOUR CARD GOES HERE', X, 172, { px: 2, color: YEL });
   try { return await can.encode('webp', 90); } catch { return can.toBuffer('image/png'); }
 }
