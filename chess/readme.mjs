@@ -15,6 +15,8 @@ const README = path.join(ROOT, 'README.md');
 const read = f => { const p = path.join(ROOT, 'chess', f); return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')) : null; };
 export const REPO = process.env.GITHUB_REPOSITORY || '2md55nmxkw-arch/2md55nmxkw-arch';
 export const ENGINE = 'stockfish';
+// вторая страница: архив партий, лучшие партии и блестящие ходы (её пишет chess/archive.mjs)
+export const GAMES_URL = `https://github.com/${REPO}/blob/main/games/README.md`;
 
 const GLYPH = { k: '♔', q: '♕', r: '♖', b: '♗', n: '♘', p: '♙' };
 const glyph = t => GLYPH[t] + '︎'; // текстовое начертание, а не эмодзи
@@ -73,6 +75,8 @@ function moves(state, chess) {
   if (state.recent?.length) R.push(state.recent.slice(0, 10).map(u => avatar(u)).join(' '), '');
   // зал славы — те, кто поставил мат движку: обычные аватарки и ссылки
   if (state.hall?.length) R.push(`<sub>Hall of mate: ${state.hall.slice(0, 5).map(h => `${avatar(h.user, 16)} ${who(h.user)} (game ${h.game})`).join(' · ')}</sub>`, '');
+  // ссылка на вторую страницу — как только есть хоть одна законченная партия
+  if (fs.existsSync(path.join(ROOT, 'games', 'games.json'))) R.push(`<sub>${glyph('q')} ${a(GAMES_URL, 'Hall of games')} · every finished game, best first, with all the brilliant moves</sub>`, '');
   return R;
 }
 

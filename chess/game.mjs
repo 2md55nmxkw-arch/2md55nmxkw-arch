@@ -4,6 +4,7 @@
 //   node chess/game.mjs --render   — перерисовать доску и README из текущего состояния
 //   node chess/game.mjs --reset    — начать всё с нуля
 // Результат: chess/state.json, chess/board-*.webp и chess/panel-*.svg (в тёмной и светлой теме), секция README,
+// в конце партии — запись в games/ (архив и страница «зал партий», см. chess/archive.mjs),
 // текст ответа в chess/.comment.md и outputs result=ok|rejected, move=… для workflow.
 import { Chess } from 'chess.js';
 import fs from 'node:fs';
@@ -16,7 +17,8 @@ import { classify } from './analysis.mjs';
 import { BADGE } from './badges.mjs';
 import { writePanel } from './panel.mjs';
 import { lightName } from './theme.mjs';
-import { writeReadme, who, ENGINE, REPO } from './readme.mjs';
+import { writeReadme, who, ENGINE, REPO, GAMES_URL } from './readme.mjs';
+import { archiveGame } from './archive.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = path.join(ROOT, 'chess');
@@ -75,9 +77,13 @@ async function finish(state, chess, mv, by) {
     board: chess.board(), last: state.last, check: kingInCheck(chess), marks: marks(state),
     score: chess.isCheckmate() ? { mate: mv.color === 'w' ? 1 : -1 } : { cp: 0 },
   };
-  fs.writeFileSync(path.join(DIR, finalImg), await renderBoard(view));
-  fs.writeFileSync(path.join(DIR, lightName(finalImg)), await renderBoard({ ...view, theme: 'light' }));
-  const games = [{ game: state.game, result, reason, plies: state.moves.length, final: mv.san, by, at: new Date().toISOString() }, ...state.games];
+  const dark = await renderBoard(view), light = await renderBoard({ ...view, theme: 'light' });
+  fs.writeFileSync(path.join(DIR, finalImg), dark);
+  fs.writeFileSync(path.join(DIR, lightName(finalImg)), light);
+  const summary = { game: state.game, result, reason, plies: state.moves.length, final: mv.san, by, at: new Date().toISOString() };
+  // партия целиком — в архив: по нему строится страница с лучшими партиями и блестящими ходами
+  archiveGame({ ...summary, moves: state.moves.map(m => ({ san: m.san, by: m.by, cls: m.cls })) }, { dark, light });
+  const games = [summary, ...state.games];
   let hall = state.hall, extra = '';
   if (result === '1-0' && by !== ENGINE) { // мат движку — в зал славы
     hall = [{ user: by, game: state.game, plies: state.moves.length, at: new Date().toISOString() }, ...hall];
@@ -85,7 +91,7 @@ async function finish(state, chess, mv, by) {
   }
   const notice = result === '1-0' ? `game ${state.game}: ${who(by)} checkmated stockfish 👑` : result === '0-1' ? `game ${state.game}: stockfish won · new game` : `game ${state.game}: draw by ${reason}`;
   Object.assign(state, fresh(state.game + 1, { players: state.players, recent: state.recent, games, hall, notice, finalImg }));
-  return `🏁 Game ${games[0].game} is over: **${result}** by ${reason}. A new game has started.${extra}`;
+  return `🏁 Game ${games[0].game} is over: **${result}** by ${reason}. A new game has started, and this one is now in the [Hall of games](${GAMES_URL}).${extra}`;
 }
 // ответ движка с разбором: pre — анализ позиции до его хода (если уже есть)
 async function engineTurn(state, chess, pre) {
