@@ -2,96 +2,36 @@
   "recent": [
     "2md55nmxkw-arch"
   ],
-  "hall": [],
-  "game": 1,
-  "fen": "1nbqkbnr/rpp2ppp/8/4p3/3p4/8/PPPPPPPP/1RBQKBNR w Kk - 0 5",
-  "moves": [
+  "hall": [
     {
-      "n": 1,
-      "san": "Na3",
-      "uci": "b1a3",
-      "by": "2md55nmxkw-arch",
-      "at": "2026-11-09T18:57:26.079Z",
-      "cls": "book"
-    },
-    {
-      "n": 2,
-      "san": "d5",
-      "uci": "d7d5",
-      "by": "stockfish",
-      "at": "2026-11-09T19:06:43.958Z",
-      "cls": "book"
-    },
-    {
-      "n": 3,
-      "san": "Rb1",
-      "uci": "a1b1",
-      "by": "2md55nmxkw-arch",
-      "at": "2026-11-09T19:09:01.688Z",
-      "cls": "mistake"
-    },
-    {
-      "n": 4,
-      "san": "e5",
-      "uci": "e7e5",
-      "by": "stockfish",
-      "at": "2026-11-09T19:09:02.620Z",
-      "cls": "best"
-    },
-    {
-      "n": 5,
-      "san": "Nb5",
-      "uci": "a3b5",
-      "to": "b5",
-      "by": "2md55nmxkw-arch",
-      "cls": "inaccuracy",
-      "at": "2026-11-09T19:26:28.877Z"
-    },
-    {
-      "n": 6,
-      "san": "d4",
-      "uci": "d5d4",
-      "to": "d4",
-      "by": "stockfish",
-      "cls": "good",
-      "at": "2026-11-09T19:26:30.367Z"
-    },
-    {
-      "n": 7,
-      "san": "Nxa7",
-      "uci": "b5a7",
-      "to": "a7",
-      "by": "2md55nmxkw-arch",
-      "cls": "mistake",
-      "at": "2026-11-09T19:28:50.384Z"
-    },
-    {
-      "n": 8,
-      "san": "Rxa7",
-      "uci": "a8a7",
-      "to": "a7",
-      "by": "stockfish",
-      "cls": "best",
-      "at": "2026-11-09T19:28:51.941Z"
+      "user": "2md55nmxkw-arch",
+      "game": 1,
+      "plies": 51,
+      "at": "2026-11-10T06:12:17.123Z"
     }
   ],
-  "last": {
-    "from": "a8",
-    "to": "a7"
-  },
+  "game": 2,
+  "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "moves": [],
+  "last": null,
   "players": {
-    "2md55nmxkw-arch": 4
+    "2md55nmxkw-arch": 26
   },
-  "games": [],
-  "notice": null,
+  "games": [
+    {
+      "game": 1,
+      "result": "1-0",
+      "reason": "checkmate",
+      "plies": 51,
+      "final": "Qc7#",
+      "by": "2md55nmxkw-arch",
+      "at": "2026-11-10T06:12:16.405Z"
+    }
+  ],
+  "notice": "game 1: <a href=\"https://github.com/2md55nmxkw-arch\">@2md55nmxkw-arch</a> checkmated stockfish 👑",
   "eval": {
-    "cp": -481
+    "cp": 65
   },
-  "img": "board-1-8-f10cbe.webp",
-  "scoreImg": "score-dc3dde.webp",
-  "label": {
-    "img": "label-211e88.webp",
-    "w": 243,
-    "h": 55
-  }
+  "img": "board-2-0-87b3c0.webp",
+  "finalImg": "final-1.webp"
 }

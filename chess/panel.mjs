@@ -58,7 +58,8 @@ export function renderPanel({ state, activity, profile }, theme = 'dark') {
     out.push(`<path d="M${x + PAD} ${y + 108.5}H${x + C - PAD}" stroke="${T.border}"/>`);
     row(x, y + 130, 'moves', s.moves);
     row(x, y + 150, 'players', s.players);
-    row(x, y + 170, 'hall of mate', s.hall.length ? clip('@' + s.hall[0], 14) + (s.hall.length > 1 ? ` +${s.hall.length - 1}` : '') : 'nobody yet', s.hall.length ? T.fg : T.muted);
+    // зал славы: кто поставил мат движку (короткая подпись, чтобы ник помещался целиком)
+    row(x, y + 170, 'won by', s.hall.length ? clip('@' + s.hall[0], s.hall.length > 1 ? 14 : 17) + (s.hall.length > 1 ? ` +${s.hall.length - 1}` : '') : 'nobody yet', s.hall.length ? T.fg : T.muted);
   }
   { // ── проекты как фигуры ──
     const x = 0.5 + C, y = TOP, list = (profile?.projects ?? []).slice(0, 6);
