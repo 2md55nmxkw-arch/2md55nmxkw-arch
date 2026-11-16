@@ -25,26 +25,42 @@
       "piece": "b"
     },
     {
+      "name": "tzar-hub",
+      "url": "https://github.com/2md55nmxkw-arch/tzar-hub",
+      "stars": 0,
+      "piece": "n"
+    },
+    {
       "name": "2md55nmxkw-arch.github.io",
       "url": "https://github.com/2md55nmxkw-arch/2md55nmxkw-arch.github.io",
       "stars": 0,
-      "piece": "n"
+      "piece": "p"
     }
   ],
   "material": [
     {
-      "name": "C++",
-      "pct": 50,
-      "color": "#f34b7d"
-    },
-    {
       "name": "Luau",
-      "pct": 31,
+      "pct": 62,
       "color": "#00A2FF"
     },
     {
+      "name": "Lua",
+      "pct": 23,
+      "color": "#000080"
+    },
+    {
+      "name": "TypeScript",
+      "pct": 8,
+      "color": "#3178c6"
+    },
+    {
+      "name": "C++",
+      "pct": 5,
+      "color": "#f34b7d"
+    },
+    {
       "name": "JavaScript",
-      "pct": 19,
+      "pct": 2,
       "color": "#f1e05a"
     }
   ]
