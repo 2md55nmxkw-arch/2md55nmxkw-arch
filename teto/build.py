@@ -60,7 +60,7 @@ def dialogue():
     size, lh, max_w = 22, 32, 660
     groups = [wrap(t, "ms500", size, max_w) for t in lines]
     max_lines = max(len(g) for g in groups)
-    y_first = 62
+    y_first = 34
     H = y_first + (max_lines - 1) * lh + 16
     cap = cap_height("ms500", size)
 
@@ -75,15 +75,8 @@ def dialogue():
         t += win
     T = t
     css = [f".t{{{fam('ms500')};font-size:{size}px;fill:{P['fg']}}}",
-           f".s{{{fam('ms600')};font-size:11px;letter-spacing:1.76px;fill:{P['teto']}}}",
            "@keyframes b{0%{opacity:1}50%{opacity:0}100%{opacity:1}}.blink{animation:b 1s steps(1) infinite}"]
     body = []
-
-    # speaker
-    sw = measure("KASANE TETO", "ms600", 11, 1.76)
-    sx = (W - (6 + 8 + sw)) / 2
-    body.append(f'<circle cx="{sx + 3:.1f}" cy="16" r="3" fill="{P["teto"]}"/>')
-    body.append(f'<text class="s" x="{sx + 14:.1f}" y="{16 + cap_height("ms600", 11) / 2:.1f}">KASANE TETO</text>')
 
     for gi, g in enumerate(groups):
         win, s0 = windows[gi], starts[gi]
@@ -115,7 +108,7 @@ def dialogue():
 
     css.append("@media (prefers-reduced-motion:reduce){.g0{animation:none;opacity:1}.g1,.g2{animation:none;opacity:0}"
                ".c0{animation:none;fill-opacity:1}.blink{animation:none}}")
-    chars = {"ms500": "".join(lines), "ms600": "KASANE TETO"}
+    chars = {"ms500": "".join(lines)}
     alt = " / ".join(lines)
     return svg(W, int(H), "".join(body), fonts_css(chars) + "".join(css), "Kasane Teto: " + alt), alt
 
