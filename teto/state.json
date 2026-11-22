@@ -1,7 +1,11 @@
 {
-  "baguettes": 0,
-  "last_feeder": null,
-  "reply": "Press a button below and I'll answer. Usually within a minute.",
-  "last_event": null,
-  "events": 0
+  "baguettes": 1,
+  "last_feeder": "2md55nmxkw-arch",
+  "reply": "@2md55nmxkw-arch brought a baguette. You may stay.",
+  "last_event": {
+    "action": "feed",
+    "user": "2md55nmxkw-arch",
+    "at": "2026-11-22T08:15:00Z"
+  },
+  "events": 1
 }
