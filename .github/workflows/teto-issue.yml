@@ -1,0 +1,70 @@
+# A visitor pressed one of Teto's buttons: an issue titled "teto|feed", "teto|news" or "teto|poke".
+# The title comes from strangers: it reaches the script only through env and is matched by a strict regex.
+name: teto issue
+
+on:
+  issues:
+    types: [opened]
+
+# one README writer at a time
+concurrency:
+  group: readme
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  reply:
+    if: startsWith(github.event.issue.title, 'teto|')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: teto/requirements.txt
+
+      - run: pip install -r teto/requirements.txt
+
+      - name: Teto reacts
+        id: talk
+        env:
+          TETO_TITLE: ${{ github.event.issue.title }}
+          TETO_USER: ${{ github.event.issue.user.login }}
+        run: python teto/interact.py
+
+      - name: Rebuild README
+        if: steps.talk.outputs.result == 'ok'
+        run: python teto/build.py
+
+      - name: Commit
+        if: steps.talk.outputs.result == 'ok'
+        env:
+          ACTION: ${{ steps.talk.outputs.action }}
+          TETO_USER: ${{ github.event.issue.user.login }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A README.md teto/state.json assets/teto
+          git commit -m "teto: $ACTION from @$TETO_USER" || exit 0
+          for i in 1 2 3; do git push && break; git pull --rebase; done
+
+      - name: Answer and close the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ github.event.issue.number }}
+          RESULT: ${{ steps.talk.outputs.result }}
+        run: |
+          if [ "$RESULT" = "ok" ]; then
+            gh issue comment "$NUMBER" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/teto-reply.md"
+          else
+            gh issue comment "$NUMBER" --repo "$GITHUB_REPOSITORY" --body "Teto didn't get that. Use the buttons on the profile, they fill the title in for you."
+          fi
+          gh issue close "$NUMBER" --repo "$GITHUB_REPOSITORY"
