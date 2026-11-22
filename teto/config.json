@@ -1,0 +1,30 @@
+{
+  "owner": "2md55nmxkw-arch",
+  "repo": "2md55nmxkw-arch",
+  "intro": "This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had.",
+  "projects": [
+    {
+      "repo": "tzar-hub",
+      "description": "Roblox script hub, keyless and open source, with an in-game command panel",
+      "flavor": "The Cmdr panel again, probably."
+    },
+    {
+      "repo": "endfield-il2dump",
+      "description": "Offline IL2CPP metadata dumper for Unity x64, no injection needed",
+      "flavor": "More metadata, more structs."
+    },
+    {
+      "repo": "LuauEmu",
+      "description": "Runs Luau scripts outside Roblox on Lune, with a live Instance tree",
+      "flavor": "The emulator lives!"
+    },
+    {
+      "repo": "Loliland-ModLoader",
+      "description": "Windows loader for a local mod workflow on launcher builds",
+      "flavor": "Mods, mods, mods."
+    }
+  ],
+  "languages_exclude_repos": ["2md55nmxkw-arch"],
+  "languages_top": 5,
+  "credits": "Kasane Teto © TWINDRILL · banner rendered with canvas + ffmpeg · Teto replies in about a minute"
+}
