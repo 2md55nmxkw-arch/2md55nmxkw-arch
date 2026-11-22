@@ -1,11 +1,48 @@
 {
-  "generated": "2026-11-22T07:00:00Z",
+  "generated": "2026-11-22T08:10:38Z",
   "repos": {
-    "tzar-hub": { "stars": 0, "language": "Luau", "pushedAt": "2026-11-15T11:56:52Z" },
-    "endfield-il2dump": { "stars": 2, "language": "C++", "pushedAt": "2026-05-27T12:17:38Z" },
-    "LuauEmu": { "stars": 1, "language": "Luau", "pushedAt": "2026-06-19T01:19:43Z" },
-    "Loliland-ModLoader": { "stars": 1, "language": "C++", "pushedAt": "2026-05-05T16:26:30Z" }
+    "tzar-hub": {
+      "stars": 0,
+      "language": "Luau",
+      "pushedAt": "2026-11-15T11:56:52Z"
+    },
+    "endfield-il2dump": {
+      "stars": 2,
+      "language": "C++",
+      "pushedAt": "2026-05-27T12:17:38Z"
+    },
+    "LuauEmu": {
+      "stars": 1,
+      "language": "Luau",
+      "pushedAt": "2026-06-19T01:19:43Z"
+    },
+    "Loliland-ModLoader": {
+      "stars": 1,
+      "language": "C++",
+      "pushedAt": "2026-05-05T16:26:30Z"
+    }
   },
-  "languages": [["Luau", 62], ["Lua", 23], ["TypeScript", 8], ["C++", 5], ["JavaScript", 2]],
-  "week_contributions": null
+  "languages": [
+    [
+      "Luau",
+      62
+    ],
+    [
+      "Lua",
+      24
+    ],
+    [
+      "TypeScript",
+      8
+    ],
+    [
+      "C++",
+      5
+    ],
+    [
+      "CSS",
+      1
+    ]
+  ],
+  "week_contributions": 10
 }
