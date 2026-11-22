@@ -18,7 +18,7 @@
   <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=teto%7Cnews&body=Teto%2C+what%27s+new%3F%0A%0AJust+press+%2A%2ACreate%2A%2A.+Teto+answers+here+and+on+the+profile+in+about+a+minute.%0A%0APlease+don%27t+change+the+title."><img src="./assets/teto/btn-news-fa3beae.svg" height="32" alt="What's new?"></a>
   <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=teto%7Cpoke&body=%2Apoke%2A%0A%0AJust+press+%2A%2ACreate%2A%2A.+Teto+answers+here+and+on+the+profile+in+about+a+minute.%0A%0APlease+don%27t+change+the+title."><img src="./assets/teto/btn-poke-c140dd5.svg" height="32" alt="Poke"></a>
   <br>
-  <img src="./assets/teto/counter-9db4353.svg" width="100%" alt="No baguettes yet · be the first to feed her">
+  <img src="./assets/teto/counter-4b44ed2.svg" width="100%" alt="1 baguette so far · the last one came from @2md55nmxkw-arch">
 </p>
 
 <br>
