@@ -10,7 +10,7 @@
 </picture>
 
 <p align="center">
-  <img src="./assets/teto/dialogue-9b05848.svg" width="100%" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, 6 days ago. The Cmdr panel again, probably. 16 contributions this week. / @2md55nmxkw-arch wants news. Latest push went to tzar-hub, 6 days ago. The Cmdr panel again, probably. 10 contributions this week.">
+  <img src="./assets/teto/dialogue-bdaf6fc.svg" width="100%" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, a week ago. The Cmdr panel again, probably. 16 contributions this week. / Crunchy. @2md55nmxkw-arch has excellent taste.">
 </p>
 
 <p align="center">
@@ -18,7 +18,7 @@
   <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=teto%7Cnews&body=Teto%2C+what%27s+new%3F%0A%0AJust+press+%2A%2ACreate%2A%2A.+Teto+answers+here+and+on+the+profile+in+about+a+minute.%0A%0APlease+don%27t+change+the+title."><img src="./assets/teto/btn-news-fa3beae.svg" height="32" alt="What's new?"></a>
   <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=teto%7Cpoke&body=%2Apoke%2A%0A%0AJust+press+%2A%2ACreate%2A%2A.+Teto+answers+here+and+on+the+profile+in+about+a+minute.%0A%0APlease+don%27t+change+the+title."><img src="./assets/teto/btn-poke-c140dd5.svg" height="32" alt="Poke"></a>
   <br>
-  <img src="./assets/teto/counter-4b44ed2.svg" width="100%" alt="1 baguette so far · the last one came from @2md55nmxkw-arch">
+  <img src="./assets/teto/counter-bd32f8c.svg" width="100%" alt="2 baguettes so far · the last one came from @2md55nmxkw-arch">
 </p>
 
 <br>
