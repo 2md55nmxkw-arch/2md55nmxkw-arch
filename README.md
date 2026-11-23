@@ -10,7 +10,7 @@
 </picture>
 
 <p align="center">
-  <img src="./assets/teto/dialogue-bdaf6fc.svg" width="100%" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, a week ago. The Cmdr panel again, probably. 16 contributions this week. / Crunchy. @2md55nmxkw-arch has excellent taste.">
+  <img src="./assets/teto/dialogue-ea49cc1.svg" width="100%" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, a week ago. The Cmdr panel again, probably. 17 contributions this week. / Crunchy. @2md55nmxkw-arch has excellent taste.">
 </p>
 
 <p align="center">
