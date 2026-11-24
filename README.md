@@ -10,7 +10,7 @@
 </picture>
 
 <p align="center">
-  <img src="./assets/teto/dialogue-ea49cc1.svg" width="100%" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, a week ago. The Cmdr panel again, probably. 17 contributions this week. / Crunchy. @2md55nmxkw-arch has excellent taste.">
+  <img src="./assets/teto/dialogue-824ad2e.svg" width="100%" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, a week ago. The Cmdr panel again, probably. 18 contributions this week. / Crunchy. @2md55nmxkw-arch has excellent taste.">
 </p>
 
 <p align="center">
@@ -40,7 +40,7 @@
 <summary><img src="./assets/teto/sep-stack-5308e31.svg" width="95%" alt="Stack"></summary>
 <br>
 <p align="center">
-  <img src="./assets/teto/stack-c6d9186.svg" width="71%" alt="Luau 62%, Lua 24%, TypeScript 8%, C++ 5%, CSS 1%">
+  <img src="./assets/teto/stack-8eee537.svg" width="71%" alt="Luau 50%, TypeScript 23%, Lua 19%, C++ 4%, CSS 2%">
 </p>
 </details>
 
