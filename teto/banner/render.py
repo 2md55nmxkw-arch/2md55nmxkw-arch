@@ -86,7 +86,7 @@ def rgb(hex_):
 cfg = json.loads((TETO / "config.json").read_text())
 data = json.loads((TETO / "data.json").read_text())
 # card text is shorter than the README description; a project without an entry gets its config description, cut to fit
-SHORT = {"tzar-hub": "Roblox script hub · keyless", "endfield-il2dump": "offline IL2CPP metadata dumper",
+SHORT = {"tzar-hub": "Roblox script hub · keyless", "kimera": "Teto in three skins · browser art", "endfield-il2dump": "offline IL2CPP metadata dumper",
          "LuauEmu": "Luau emulator outside Roblox", "Loliland-ModLoader": "mod loader for builds"}
 # cards that only ever sit out of focus in the back: (text, language, stars)
 EXTRA = {"tzar-admin": ("in-game command panel", "Luau", 0), "WindUI": ("UI library fork · markdown", "Lua", 1)}

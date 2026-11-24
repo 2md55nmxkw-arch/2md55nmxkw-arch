@@ -328,12 +328,22 @@ def row(th, i, p, meta):
         ("s", 40, 16, 14, 20, 21, 16, wrap_max(text, "ms400", 14, FIT["s"] - 40, 2)),
         ("n", 32, 15, 13, 18, 20, 12, wrap_max(text, "ms400", 13, FIT["n"] - 32, 2)),
     )
+    # a repository archived on GitHub says so next to its name, the way GitHub labels it
+    tag = "archived" if r.get("archived") else None
+    tag_w = measure(tag, "ms500", 10.5) + 14 if tag else 0
+    if tag:
+        used["ms500"] = tag
     mid = {}  # y of the title's cap centre: the index and the meta follow it on the smaller layouts
     for cls, x, ts, ds, lh, gap, air, lines in layouts:
         cap = cap_height("ms600", ts)
         y = (ROW_H - (cap + gap + (len(lines) - 1) * lh)) / 2 + cap
-        title = ellipsize(name, "ms600", ts, FIT[cls] - x - air - meta["w"])
+        title = ellipsize(name, "ms600", ts, FIT[cls] - x - air - meta["w"] - (tag_w + 10 if tag else 0))
         parts.append(f'<text class="L {cls}" x="{x}" y="{y:.1f}" style="{fam("ms600")};font-size:{ts}px" fill="{th["fg"]}">{esc(title)}</text>')
+        if tag:
+            tx, tc = x + measure(title, "ms600", ts) + 10, y - cap / 2
+            parts.append(f'<g class="L {cls}"><rect x="{tx + .5:.1f}" y="{tc - 8:.1f}" width="{tag_w - 1:.1f}" height="16" rx="8" fill="none" '
+                         f'stroke="{th["border"]}"/><text x="{tx + 7:.1f}" y="{tc + cap_height("ms500", 10.5) / 2:.1f}" '
+                         f'style="{fam("ms500")};font-size:10.5px" fill="{th["fgMuted"]}">{tag}</text></g>')
         for li, line in enumerate(lines):
             parts.append(f'<text class="L {cls}" x="{x}" y="{y + gap + li * lh:.1f}" style="{fam("ms400")};font-size:{ds}px" '
                          f'fill="{th["fgMuted"]}">{esc(line)}</text>')
@@ -364,7 +374,7 @@ def row(th, i, p, meta):
          + ARROW.format(x="-11.75", y="-8", c=th["fgMuted"]))
     parts.append(anchor("100%", f'<g class="meta">{m}</g>'))
 
-    alt = f"{name}: {text} ({lang}, {stars} stars)"
+    alt = f"{name}: {text} ({lang}, {stars} stars{', archived' if tag else ''})"
     return fluid(ROW_H, "".join(parts), fonts_css(used) + css, alt), alt, ROW_H
 
 
