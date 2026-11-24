@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T12:38:11Z",
+  "generated": "2026-11-24T16:18:06Z",
   "repos": {
     "tzar-hub": {
       "stars": 0,
@@ -10,11 +10,6 @@
       "stars": 2,
       "language": "C++",
       "pushedAt": "2026-05-27T12:17:38Z"
-    },
-    "LuauEmu": {
-      "stars": 1,
-      "language": "Luau",
-      "pushedAt": "2026-06-19T01:19:43Z"
     },
     "Loliland-ModLoader": {
       "stars": 1,
@@ -29,20 +24,20 @@
     ],
     [
       "TypeScript",
-      23
+      25
     ],
     [
       "Lua",
-      19
-    ],
-    [
-      "C++",
-      4
+      20
     ],
     [
       "CSS",
       2
+    ],
+    [
+      "JavaScript",
+      2
     ]
   ],
-  "week_contributions": 18
+  "week_contributions": 20
 }
