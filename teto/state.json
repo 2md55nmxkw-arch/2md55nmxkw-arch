@@ -1,15 +1,20 @@
 {
-  "baguettes": 2,
-  "last_feeder": "2md55nmxkw-arch",
-  "reply": "Crunchy. @2md55nmxkw-arch has excellent taste.",
+  "baguettes": 3,
+  "last_feeder": "RATWareLua",
+  "reply": "Mmm, warm bread. Thank you, @RATWareLua~",
   "last_event": {
     "action": "feed",
-    "user": "2md55nmxkw-arch",
-    "at": "2026-11-23T06:28:42Z"
+    "user": "RATWareLua",
+    "at": "2026-11-24T16:51:20Z"
   },
-  "events": 3,
-  "last_fed_at": "2026-11-23T06:28:42Z",
+  "events": 4,
+  "last_fed_at": "2026-11-24T16:51:20Z",
   "guests": [
+    {
+      "user": "RATWareLua",
+      "action": "feed",
+      "at": "2026-11-24T16:51:20Z"
+    },
     {
       "user": "2md55nmxkw-arch",
       "action": "feed",

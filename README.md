@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-abb6255.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-c4fadd5.svg"><img src="./assets/teto/dialogue-dark-abb6255.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, today. The Cmdr panel again, probably. 23 contributions this week. / Crunchy. @2md55nmxkw-arch has excellent taste."></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-945365f.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-632a04f.svg"><img src="./assets/teto/dialogue-dark-945365f.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, today. The Cmdr panel again, probably. 23 contributions this week. / Mmm, warm bread. Thank you, @RATWareLua~"></picture>
 </p>
 
 <p align="center">
@@ -27,8 +27,9 @@
   <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=teto%7Cnews&body=Teto%2C+what%27s+new%3F%0A%0AJust+press+%2A%2ACreate%2A%2A.+Teto+answers+here+and+on+the+profile+in+about+a+minute.%0A%0APlease+don%27t+change+the+title."><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/btn-news-dark-9f92784.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/btn-news-light-8446a60.svg"><img src="./assets/teto/btn-news-dark-9f92784.svg" height="32" alt="What's new?"></picture></a>
   <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=teto%7Cpoke&body=%2Apoke%2A%0A%0AJust+press+%2A%2ACreate%2A%2A.+Teto+answers+here+and+on+the+profile+in+about+a+minute.%0A%0APlease+don%27t+change+the+title."><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/btn-poke-dark-2051f74.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/btn-poke-light-76e2354.svg"><img src="./assets/teto/btn-poke-dark-2051f74.svg" height="32" alt="Poke"></picture></a>
   <br>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/counter-dark-b8ff445.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/counter-light-908f0dc.svg"><img src="./assets/teto/counter-dark-b8ff445.svg" width="100%" height="20" alt="2 baguettes so far · the last one came from @2md55nmxkw-arch"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/counter-dark-15fd28f.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/counter-light-809443f.svg"><img src="./assets/teto/counter-dark-15fd28f.svg" width="100%" height="20" alt="3 baguettes so far · the last one came from @RATWareLua"></picture>
   <br>
+  <a href="https://github.com/RATWareLua" title="@RATWareLua fed her"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-ratwarelua-dark-68dd620.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-ratwarelua-light-ea9e9c3.svg"><img src="./assets/teto/guest-ratwarelua-dark-68dd620.svg" height="34" alt="@RATWareLua fed her"></picture></a>
   <a href="https://github.com/2md55nmxkw-arch" title="@2md55nmxkw-arch fed her"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-2md55nmxkw-arch-dark-b263dbc.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-2md55nmxkw-arch-light-b169ae7.svg"><img src="./assets/teto/guest-2md55nmxkw-arch-dark-b263dbc.svg" height="34" alt="@2md55nmxkw-arch fed her"></picture></a>
 </p>
 
