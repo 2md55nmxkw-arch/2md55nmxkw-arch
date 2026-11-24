@@ -2,47 +2,49 @@
   This README is generated. Edit teto/README.template.md and teto/config.json, then run:
     pip install fonttools brotli && python teto/build.py
   Actions rebuild it every day (teto-daily) and when someone talks to Teto (teto-issue).
+
+  Every piece comes in a dark and a light version and <picture> shows the one for the reader's
+  GitHub theme. Full-width pieces keep their own height and reflow for narrow screens by themselves.
+  Each block is one <p>: GitHub puts 16px under it, the rest of the spacing is inside the images.
 -->
 
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-static.png">
-  <img src="./assets/teto/banner.webp" width="100%" alt="Kasane Teto pressed against the glass of your screen, project cards floating around her">
-</picture>
-
 <p align="center">
-  <img src="{{dialogue}}" width="100%" alt="{{alt_dialogue}}">
+  <picture>
+    <source media="(prefers-color-scheme: light) and (prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-light-static.png">
+    <source media="(prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-static.png">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/teto/banner-light.webp">
+    <img src="./assets/teto/banner.webp" width="100%" alt="Kasane Teto pressed against the glass of your screen, project cards floating around her">
+  </picture>
 </p>
 
 <p align="center">
-  <a href="{{issue_feed}}"><img src="{{btn_feed}}" height="32" alt="{{alt_btn_feed}}"></a>
-  <a href="{{issue_news}}"><img src="{{btn_news}}" height="32" alt="{{alt_btn_news}}"></a>
-  <a href="{{issue_poke}}"><img src="{{btn_poke}}" height="32" alt="{{alt_btn_poke}}"></a>
+  {{dialogue}}
+</p>
+
+<p align="center">
+  {{buttons}}
   <br>
-  <img src="{{counter}}" width="100%" alt="{{alt_counter}}">
+  {{counter}}
 </p>
 
-<br>
-
-<details open>
-<summary><img src="{{sep_projects}}" width="95%" alt="Projects"></summary>
-<br>
-
-{{rows}}
-
-</details>
-
-<br>
-
-<details open>
-<summary><img src="{{sep_stack}}" width="95%" alt="Stack"></summary>
-<br>
-<p align="center">
-  <img src="{{stack}}" width="71%" alt="{{alt_stack}}">
+<p>
+  {{sep_projects}}
 </p>
-</details>
 
-<br>
+<p>
+  {{rows}}
+</p>
+
+<p>
+  {{sep_stack}}
+</p>
+
+<p>
+  {{stack}}
+  <br>
+  {{legend}}
+</p>
 
 <p align="center">
-  <img src="{{footer}}" width="100%" alt="{{alt_footer}}">
+  {{footer}}
 </p>

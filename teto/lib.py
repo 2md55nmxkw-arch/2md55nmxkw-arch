@@ -1,9 +1,10 @@
-"""Shared helpers: palette, font metrics, subset font embedding, SVG bits."""
+"""Shared helpers: palettes, layout breakpoints, font metrics, subset font embedding, SVG bits."""
 import base64
 import hashlib
 import io
 import json
 import pathlib
+import re
 from xml.sax.saxutils import escape
 
 from fontTools import subset
@@ -13,16 +14,23 @@ ROOT = pathlib.Path(__file__).resolve().parent
 REPO = ROOT.parent
 FONTS = ROOT / "fonts"
 
-# GitHub Primer dark + Teto red
-P = {
-    "canvas": "#0D1117", "muted": "#151B23", "btn": "#212830", "border": "#3D444D",
-    "fg": "#F0F6FC", "fgMuted": "#9198A1", "teto": "#E5394A",
+# GitHub Primer + Teto red, one palette per GitHub theme. "ramp" is the single-hue scale for
+# language shares, biggest share first: each step sits closer to the page colour than the one
+# before it, and the last one still clears 2:1 against the canvas.
+THEMES = {
+    "dark": {"canvas": "#0D1117", "border": "#3D444D", "fg": "#F0F6FC", "fgMuted": "#9198A1",
+             "teto": "#E5394A", "btn": "#C42B3D", "btnFg": "#FFFFFF", "rest": "#3D444D", "sheen": 0.22,
+             "ramp": ["#FD5862", "#E34450", "#C33843", "#A42D36", "#86222A"]},
+    "light": {"canvas": "#FFFFFF", "border": "#D1D9E0", "fg": "#1F2328", "fgMuted": "#59636E",
+              "teto": "#D1293B", "btn": "#C42B3D", "btnFg": "#FFFFFF", "rest": "#AFB8C1", "sheen": 0.4,
+              "ramp": ["#C41934", "#D93A48", "#E55D62", "#EE7D7D", "#F39C9A"]},
 }
-LANG_COLORS = {
-    "Luau": "#00A2FF", "Lua": "#6C78E0", "TypeScript": "#3178C6", "C++": "#F34B7D",
-    "JavaScript": "#F1E05A", "Python": "#3572A5", "C": "#555555", "C#": "#178600",
-    "HTML": "#E34C26", "CSS": "#663399", "Rust": "#DEA584", "Go": "#00ADD8", "Shell": "#89E051",
-}
+
+# The README column is ~830px on a wide desktop profile, 560-760px in a smaller window and
+# ~330px on a phone. Fluid pieces switch layout on their own rendered width. Each layout is
+# drawn to fit the narrowest column it can get: (name, that width), widest first.
+LAYOUTS = (("w", 760), ("m", 600), ("s", 460), ("n", 300))
+FIT = dict(LAYOUTS)
 
 FONT_FILES = {
     "ms400": ("Mona Sans", 400, "mona-sans-latin-400-normal.woff2"),
@@ -63,8 +71,34 @@ def cap_height(key, size):
     return ch * size / f["head"].unitsPerEm
 
 
+def _fit(word, key, size, max_w):
+    """A word wider than a whole line (a long @login on a phone) is cut after a hyphen,
+    or wherever it has to be if there is none."""
+    if measure(word, key, size) <= max_w:
+        return [word]
+    parts, cur = [], ""
+    for piece in re.split(r"(?<=-)", word):
+        while measure(piece, key, size) > max_w:
+            n = len(piece)
+            while n > 1 and measure(piece[:n], key, size) > max_w:
+                n -= 1
+            if cur:
+                parts.append(cur)
+                cur = ""
+            parts.append(piece[:n])
+            piece = piece[n:]
+        if cur and measure(cur + piece, key, size) > max_w:
+            parts.append(cur)
+            cur = piece
+        else:
+            cur += piece
+    if cur:
+        parts.append(cur)
+    return parts
+
+
 def wrap(text, key, size, max_w):
-    words, lines, cur = text.split(" "), [], ""
+    words, lines, cur = [w for word in text.split(" ") for w in _fit(word, key, size, max_w)], [], ""
     for w in words:
         trial = (cur + " " + w).strip()
         if cur and measure(trial, key, size) > max_w:
@@ -120,9 +154,87 @@ def esc(s):
 
 
 def svg(w, h, body, css="", title=""):
+    """Fixed-size piece (buttons, legend chips): scales as one image."""
     t = f"<title>{esc(title)}</title>" if title else ""
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" '
             f'role="img">{t}<style>text{{font-kerning:none}}{css}</style>{body}</svg>')
+
+
+def _upper(i):
+    """A layout ends just below the minimum width of the next wider one."""
+    return f"(max-width:{LAYOUTS[i - 1][1] - .02}px)"
+
+
+def _tiers():
+    # an element tagged class="L w m" shows on the w and m layouts only
+    css = []
+    for i, (name, lo) in enumerate(LAYOUTS):
+        cond = [_upper(i)] if i else []
+        if i < len(LAYOUTS) - 1:
+            cond.insert(0, f"(min-width:{lo}px)")
+        css.append(f"@media {' and '.join(cond)}{{.L:not(.{name}){{display:none}}}}")
+    return "".join(css)
+
+
+TIERS = _tiers()
+
+
+def tier_css(selector, prop, values):
+    """One CSS property with a value per layout: values = {layout name: value}."""
+    css = [f"{selector}{{{prop}:{values[LAYOUTS[0][0]]}}}"]
+    for i, (name, _) in enumerate(LAYOUTS[1:], 1):
+        css.append(f"@media {_upper(i)}{{{selector}{{{prop}:{values[name]}}}}}")
+    return "".join(css)
+
+
+def fluid(h, body, css="", title=""):
+    """Full-width piece: a fixed pixel height and no viewBox, so it fills the README column at any
+    width and its text stays at its real size instead of shrinking with the image. Horizontal
+    positions are percentages or sit in an <svg x="100%"> / <svg x="50%"> anchor."""
+    t = f"<title>{esc(title)}</title>" if title else ""
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" height="{h}" role="img">{t}'
+            f'<style>text{{font-kerning:none}}{TIERS}{css}</style>{body}</svg>')
+
+
+def anchor(x, body):
+    """Children are positioned relative to x ("100%" = right edge, "50%" = centre)."""
+    return f'<svg x="{x}" overflow="visible">{body}</svg>'
+
+
+def wrap_max(text, key, size, max_w, max_lines):
+    """wrap(), but never more than max_lines: the last line is ellipsized instead."""
+    lines = wrap(text, key, size, max_w)
+    if len(lines) > max_lines:
+        lines = lines[:max_lines - 1] + [ellipsize(" ".join(lines[max_lines - 1:]), key, size, max_w)]
+    return lines
+
+
+def balance(segments, sep, key, size, max_w):
+    """Join segments into as few lines as fit max_w, then pick the split with the shortest longest line."""
+    def width(group):
+        return measure(sep.join(group), key, size)
+
+    def splits(n, k):
+        if k == 1:
+            yield [n]
+            return
+        for first in range(1, n - k + 2):
+            for rest in splits(n - first, k - 1):
+                yield [first] + rest
+
+    for k in range(1, len(segments) + 1):
+        best = None
+        for sizes in splits(len(segments), k):
+            groups, i = [], 0
+            for n in sizes:
+                groups.append(segments[i:i + n])
+                i += n
+            worst = max(width(g) for g in groups)
+            if worst <= max_w and (best is None or worst < best[0]):
+                best = (worst, groups)
+        if best:
+            return [sep.join(g) for g in best[1]]
+    return [ellipsize(s, key, size, max_w) for s in segments]
 
 
 STAR = ('<path transform="translate({x},{y}) scale({s})" fill="{c}" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 '
