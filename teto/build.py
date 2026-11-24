@@ -10,8 +10,9 @@ Teto has moods (lib.mood). Hungry: nobody fed her for a few days, so she says so
 breathes and the banner loses its glow. Birthday: April 1st, with its own line, a banner with
 confetti and a highlighted 0401. TETO_NOW=2027-04-01T03:00:00Z python teto/build.py previews a date.
 
-assets/teto/header-<repo>-dark.svg / -light.svg are headers for the projects' own READMEs. Their
-names are stable, because those READMEs link to them from another repository.
+assets/teto/header-<repo>-dark.svg / -light.svg are headers for the projects' own READMEs, and
+ribbon-<repo>-*.svg is just their first line, for a README that already has a header of its own.
+Their names are stable, because those READMEs link to them from another repository.
 
 Full-width pieces are fluid (lib.fluid): they keep their pixel height and real text size at any
 column width and switch layout on their own, from wide down to phone-narrow. They share
@@ -445,15 +446,30 @@ def guest(th, g):
 
 
 # ---------------------------------------------------------------- headers for the projects' own READMEs
+def project_line(th, i, used):
+    """The profile's section line for a project: its number in the list, whose project it is, a rule, 0401."""
+    idx, label = f"{i + 1:02d}", f"{CFG.get('name') or CFG['owner']} · PROJECT".upper()
+    used["mono"] = used.get("mono", "") + idx
+    used["ms600"] = used.get("ms600", "") + label
+    used["stencil"] = "0401"
+    return (f'<text x="0" y="{14 + cap_height("mono", 12) / 2:.1f}" style="{fam("mono")};font-size:12px" fill="{th["teto"]}">{idx}</text>'
+            + rule_row(th, 14, measure(idx, "mono", 12) + 10, label))
+
+
+def ribbon(th, i, p):
+    """Only the section line: for a README that has its own logo and title."""
+    used = {}
+    alt = f"{p['repo']} is project {i + 1:02d} of {CFG.get('name') or CFG['owner']}"
+    return fluid(28, project_line(th, i, used), fonts_css(used), alt), alt, 28
+
+
 def header(th, i, p):
-    """The profile's section line (number, label, rule, 0401), then the project's name,
-    description and language. Fluid like the rest, so it fits any README column."""
+    """The section line, then the project's name, description and language. Fluid like the
+    rest, so it fits any README column."""
     name, text = p["repo"], p["description"]
     lang = (DATA["repos"].get(p["repo"]) or {}).get("language")
-    idx = f"{i + 1:02d}"
-    used = {"mono": idx, "ms600": "PROJECT", "ms400": lang or "", "stencil": "0401"}
-    parts = [f'<text x="0" y="{14 + cap_height("mono", 12) / 2:.1f}" style="{fam("mono")};font-size:12px" fill="{th["teto"]}">{idx}</text>',
-             rule_row(th, 14, measure(idx, "mono", 12) + 10, "PROJECT")]
+    used = {"ms400": lang or ""}
+    parts = [project_line(th, i, used)]
     # layouts, title size, title baseline, description size, line height, description lines
     layouts = (("w m", 30, 68, 15, 22, [ellipsize(text, "ms400", 15, FIT["m"])]),
                ("s", 26, 64, 14, 20, wrap_max(text, "ms400", 14, FIT["s"], 2)),
@@ -602,6 +618,7 @@ def main():
     for i, p in enumerate(PROJECTS):
         for theme, th in THEMES.items():
             files[f"header-{slug(p['repo'])}-{theme}.svg"] = header(th, i, p)[0]
+            files[f"ribbon-{slug(p['repo'])}-{theme}.svg"] = ribbon(th, i, p)[0]
 
     for old in OUT.glob("*.svg"):
         if old.name not in files:
