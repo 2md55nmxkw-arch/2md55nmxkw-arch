@@ -48,7 +48,7 @@
 </p>
 
 <p>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-6a7645e.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-bc60a98.svg"><img src="./assets/teto/activity-dark-6a7645e.svg" width="100%" height="66" alt="178 contributions in the last 12 weeks"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-33f85ff.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-d4fb616.svg"><img src="./assets/teto/activity-dark-33f85ff.svg" width="100%" height="66" alt="179 contributions in the last 12 weeks"></picture>
 </p>
 
 <p>
