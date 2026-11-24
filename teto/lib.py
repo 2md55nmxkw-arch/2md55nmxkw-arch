@@ -1,10 +1,14 @@
-"""Shared helpers: palettes, layout breakpoints, font metrics, subset font embedding, SVG bits."""
+"""Shared helpers: palettes, layout breakpoints, font metrics, subset font embedding, SVG bits,
+Teto's mood and the guests' avatars."""
 import base64
+import datetime as dt
 import hashlib
 import io
 import json
+import os
 import pathlib
 import re
+import urllib.request
 from xml.sax.saxutils import escape
 
 from fontTools import subset
@@ -13,6 +17,7 @@ from fontTools.ttLib import TTFont
 ROOT = pathlib.Path(__file__).resolve().parent
 REPO = ROOT.parent
 FONTS = ROOT / "fonts"
+GUESTS = ROOT / "guests"  # cached avatars of the last visitors, <login>.<ext>
 
 # GitHub Primer + Teto red, one palette per GitHub theme. "ramp" is the single-hue scale for
 # language shares, biggest share first: each step sits closer to the page colour than the one
@@ -257,3 +262,91 @@ def save_json(name, data):
 
 def short_hash(data):
     return hashlib.sha1(data.encode() if isinstance(data, str) else data).hexdigest()[:7]
+
+
+# ---------------------------------------------------------------- time and mood
+JST = dt.timezone(dt.timedelta(hours=9))
+
+
+def now():
+    """UTC now. TETO_NOW=2027-04-01T03:00:00Z overrides it, to preview a date or a hungry Teto."""
+    v = os.environ.get("TETO_NOW")
+    return parse_time(v) if v else dt.datetime.now(dt.timezone.utc)
+
+
+def parse_time(iso):
+    return dt.datetime.fromisoformat(iso.replace("Z", "+00:00"))
+
+
+def stamp(when):
+    return when.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def mood(state, cfg, when):
+    """birthday: it is April 1st in Japan, where Teto and the 0401 come from.
+    hungry: nobody has fed her for cfg["hungry_after_days"] days (or ever).
+    days: whole days since the last baguette, None if there never was one."""
+    fed = state.get("last_fed_at")
+    if not fed and (state.get("last_event") or {}).get("action") == "feed":
+        fed = state["last_event"]["at"]  # state written before last_fed_at existed
+    days = max(0, (when - parse_time(fed)).days) if fed else None
+    day = when.astimezone(JST)
+    return {"birthday": (day.month, day.day) == (4, 1),
+            "hungry": days is None or days >= cfg.get("hungry_after_days", 3), "days": days}
+
+
+# ---------------------------------------------------------------- guests' avatars
+_KINDS = ((b"\x89PNG\r\n\x1a\n", "png"), (b"\xff\xd8\xff", "jpg"), (b"GIF8", "gif"))
+_MIME = {"png": "image/png", "jpg": "image/jpeg", "gif": "image/gif"}
+LOGIN = r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})"
+
+
+def avatar_file(login):
+    for ext in _MIME:
+        f = GUESTS / f"{login.lower()}.{ext}"
+        if f.exists():
+            return f
+    return None
+
+
+def avatar_uri(login):
+    """data: URI of the cached avatar, or None. SVGs shown through <img> can't load anything
+    from the network, so the picture has to travel inside the file."""
+    f = avatar_file(login)
+    if not f:
+        return None
+    return f"data:{_MIME[f.suffix[1:]]};base64,{base64.b64encode(f.read_bytes()).decode()}"
+
+
+def fetch_avatar(login, size=64):
+    """Cache a guest's public avatar in teto/guests/. Best effort: returns the file or None.
+    The login comes from strangers, so it must match LOGIN, and only bytes that start like a
+    PNG, JPEG or GIF and stay under 256 KB are kept."""
+    if not re.fullmatch(LOGIN, login):
+        return None
+    try:
+        req = urllib.request.Request(f"https://github.com/{login}.png?size={size}", headers={"User-Agent": "teto-readme"})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            data = r.read(256 * 1024 + 1)
+    except Exception as e:  # offline, rate-limited, account gone: the guest just gets a letter instead
+        print(f"avatar of {login}: {e}")
+        return None
+    ext = next((ext for magic, ext in _KINDS if data.startswith(magic)), None)
+    if not ext or len(data) > 256 * 1024:
+        print(f"avatar of {login}: not a small PNG/JPEG/GIF, skipped")
+        return None
+    GUESTS.mkdir(exist_ok=True)
+    for old in GUESTS.glob(f"{login.lower()}.*"):
+        old.unlink()
+    f = GUESTS / f"{login.lower()}.{ext}"
+    f.write_bytes(data)
+    return f
+
+
+def prune_avatars(logins):
+    """Drop cached avatars of people who are no longer among the guests."""
+    keep = {login.lower() for login in logins}
+    if GUESTS.exists():
+        for f in GUESTS.iterdir():
+            if f.suffix[1:] in _MIME and f.stem not in keep:
+                f.unlink()

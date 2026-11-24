@@ -26,5 +26,7 @@
   ],
   "languages_exclude_repos": ["2md55nmxkw-arch"],
   "languages_top": 5,
+  "hungry_after_days": 3,
+  "guests_shown": 8,
   "credits": "Kasane Teto © TWINDRILL · banner rendered with canvas + ffmpeg · Teto replies in about a minute"
 }
