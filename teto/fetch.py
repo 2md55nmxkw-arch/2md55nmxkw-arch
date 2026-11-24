@@ -4,14 +4,17 @@
 
 Public data only: stars, primary language and last push of the configured projects,
 languages by code size across the owner's public non-fork repos, contributions per day for
-the last 12 weeks. It also fetches the avatar of any guest in state.json that has none cached.
+the last 12 weeks. It also fetches the avatar of any guest in state.json that has none cached,
+and recounts who fed Teto how many times from the "teto|feed" issues (state.json "feeders"):
+interact.py adds one per baguette, this makes the tally exact again whatever happened in between.
 """
 import datetime as dt
 import json
 import os
+import re
 import urllib.request
 
-from lib import avatar_file, fetch_avatar, load_json, prune_avatars, save_json
+from lib import LOGIN, avatar_file, fetch_avatar, load_json, prune_avatars, save_json, top_feeder
 
 QUERY = """
 query($login: String!) { user(login: $login) {
@@ -22,17 +25,48 @@ query($login: String!) { user(login: $login) {
 } }"""
 
 
-def gql(token, login):
+ISSUES = """
+query($owner: String!, $name: String!, $after: String) { repository(owner: $owner, name: $name) {
+  issues(first: 100, after: $after, orderBy: { field: CREATED_AT, direction: ASC }) {
+    pageInfo { hasNextPage endCursor } nodes { title author { login } } }
+} }"""
+
+
+def post(token, query, variables):
     req = urllib.request.Request(
         "https://api.github.com/graphql",
-        data=json.dumps({"query": QUERY, "variables": {"login": login}}).encode(),
+        data=json.dumps({"query": query, "variables": variables}).encode(),
         headers={"Authorization": f"bearer {token}", "Content-Type": "application/json", "User-Agent": "teto-readme"},
     )
     with urllib.request.urlopen(req, timeout=30) as r:
         out = json.load(r)
     if out.get("errors"):
         raise SystemExit(f"GraphQL error: {out['errors']}")
-    return out["data"]["user"]
+    return out["data"]
+
+
+def gql(token, login):
+    return post(token, QUERY, {"login": login})["user"]
+
+
+def feeders(token, owner, name):
+    """{login: baguettes} from every issue titled exactly "teto|feed", oldest first, so the first
+    person to reach a count stays ahead of a later tie. None if the history can't be read."""
+    counts, after = {}, None
+    try:
+        for _ in range(50):  # 5000 issues is plenty
+            page = post(token, ISSUES, {"owner": owner, "name": name, "after": after})["repository"]["issues"]
+            for issue in page["nodes"]:
+                login = (issue.get("author") or {}).get("login") or ""
+                if issue["title"].strip() == "teto|feed" and re.fullmatch(LOGIN, login):
+                    key = next((k for k in counts if k.lower() == login.lower()), login)
+                    counts[key] = counts.get(key, 0) + 1
+            if not page["pageInfo"]["hasNextPage"]:
+                return counts
+            after = page["pageInfo"]["endCursor"]
+    except (Exception, SystemExit) as e:  # the README still builds; the old tally stays
+        print(f"feeders: {e}")
+    return None
 
 
 def main():
@@ -69,11 +103,19 @@ def main():
     save_json("data.json", data)
     print(json.dumps(data))
 
-    guests = [g["user"] for g in (load_json("state.json") or {}).get("guests", [])]
-    for login in guests:
+    state = load_json("state.json") or {}
+    tally = feeders(os.environ["GITHUB_TOKEN"], cfg["owner"], cfg["repo"])
+    if tally is not None and tally != state.get("feeders"):
+        state["feeders"] = tally
+        save_json("state.json", state)
+        print("feeders", tally)
+
+    top = top_feeder(state)
+    faces = [g["user"] for g in state.get("guests", [])] + ([top[0]] if top else [])
+    for login in faces:
         if not avatar_file(login):
             fetch_avatar(login)
-    prune_avatars(guests)
+    prune_avatars(faces)
 
 
 if __name__ == "__main__":

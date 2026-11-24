@@ -1,4 +1,4 @@
-# A visitor pressed one of Teto's buttons: an issue titled "teto|feed", "teto|news" or "teto|poke".
+# A visitor pressed one of Teto's buttons: an issue titled "teto|feed", "teto|news", "teto|poke" or "teto|sing".
 # The title comes from strangers: it reaches the script only through env and is matched by a strict regex.
 name: teto issue
 

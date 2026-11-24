@@ -283,16 +283,30 @@ def stamp(when):
 
 
 def mood(state, cfg, when):
-    """birthday: it is April 1st in Japan, where Teto and the 0401 come from.
-    hungry: nobody has fed her for cfg["hungry_after_days"] days (or ever).
-    days: whole days since the last baguette, None if there never was one."""
+    """How Teto feels and what the banner shows. The README picks the first that applies:
+    birthday: April 1st in Japan, where Teto and the 0401 come from.
+    happy:    she got a baguette within the last 24 hours.
+    hungry:   nobody has fed her for cfg["hungry_after_days"] days (or ever).
+    season:   "snow" all December, "sakura" from March 20 to April 10, else None (Japan dates).
+    days is the number of whole days since the last baguette, None if there never was one."""
     fed = state.get("last_fed_at")
     if not fed and (state.get("last_event") or {}).get("action") == "feed":
         fed = state["last_event"]["at"]  # state written before last_fed_at existed
-    days = max(0, (when - parse_time(fed)).days) if fed else None
+    age = when - parse_time(fed) if fed else None
+    days = max(0, age.days) if fed else None
     day = when.astimezone(JST)
-    return {"birthday": (day.month, day.day) == (4, 1),
-            "hungry": days is None or days >= cfg.get("hungry_after_days", 3), "days": days}
+    md = (day.month, day.day)
+    return {"birthday": md == (4, 1),
+            "happy": age is not None and age < dt.timedelta(hours=24),
+            "hungry": days is None or days >= cfg.get("hungry_after_days", 3),
+            "season": "snow" if day.month == 12 else "sakura" if (3, 20) <= md <= (4, 10) else None,
+            "days": days}
+
+
+def top_feeder(state):
+    """(login, baguettes) of whoever fed her the most, or None. The first to reach a count keeps the title."""
+    feeders = state.get("feeders") or {}
+    return max(feeders.items(), key=lambda kv: kv[1]) if feeders else None
 
 
 # ---------------------------------------------------------------- guests' avatars

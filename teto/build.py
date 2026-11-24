@@ -7,8 +7,10 @@ teto/state.json (baguettes, guests, Teto's last reply, see interact.py). Output:
 with content-hashed names (so GitHub's image cache never serves a stale copy) and README.md.
 
 Teto has moods (lib.mood). Hungry: nobody fed her for a few days, so she says so, the feed button
-breathes and the banner loses its glow. Birthday: April 1st, with its own line, a banner with
-confetti and a highlighted 0401. TETO_NOW=2027-04-01T03:00:00Z python teto/build.py previews a date.
+breathes and the banner loses its glow. Happy: for a day after a baguette the banner glows and
+sparkles. Birthday: April 1st, with its own line, a banner with confetti and a highlighted 0401.
+In December it snows in the banner, around the end of March petals fall.
+TETO_NOW=2027-04-01T03:00:00Z python teto/build.py previews a date.
 
 assets/teto/header-<repo>-dark.svg / -light.svg are headers for the projects' own READMEs, and
 ribbon-<repo>-*.svg is just their first line, for a README that already has a header of its own.
@@ -23,7 +25,7 @@ import urllib.parse
 
 from lib import (ARROW, FIT, REPO, STAR, THEMES, anchor, avatar_uri, balance, cap_height, char_widths, ellipsize,
                  esc, fam, fluid, fonts_css, load_json, measure, mood, now, parse_time, short_hash, svg, tier_css,
-                 wrap, wrap_max)
+                 top_feeder, wrap, wrap_max)
 
 OUT = REPO / "assets" / "teto"
 CFG = load_json("config.json")
@@ -52,6 +54,25 @@ def ago(iso):
     return f"{d // 30} months ago"
 
 
+def activity_note():
+    """A remark on how the last days went, or None when nothing stands out. Today may have
+    only just begun, so a day without anything yet doesn't end a run."""
+    days = DATA.get("activity") or []
+    if len(days) < 7:
+        return None
+    today, before = days[-1], days[:-1]
+    big, when = max((today, "today"), (before[-1], "yesterday"))
+    if big >= CFG.get("big_day", 30):
+        return f"{big} contributions {when}? Go to sleep."
+    quiet = next((i for i, v in enumerate(reversed(days)) if v), len(days))
+    if quiet >= 4:
+        return f"{quiet} quiet days in a row. I'm starting to worry."
+    run = next((i for i, v in enumerate(reversed(days if today else before)) if not v), len(days))
+    if run >= 5:
+        return f"{run} days in a row. Somebody is on a roll."
+    return None
+
+
 def activity_line():
     best = None
     for p in PROJECTS:
@@ -62,8 +83,10 @@ def activity_line():
         return "Quiet times. They're probably staring at a disassembler again."
     p, r = best
     line = f"Latest push went to {p['repo']}, {ago(r['pushedAt'])}. {p['flavor']}"
-    wc = DATA.get("week_contributions")
-    if wc:
+    note, wc = activity_note(), DATA.get("week_contributions")
+    if note:
+        line += " " + note
+    elif wc:
         line += f" {wc} contributions this week."
     return line
 
@@ -201,6 +224,8 @@ def button(th, label, primary=False):
 
 
 def counter(th):
+    """Baguettes so far and who or what is behind the number; under it, ten pips that fill up
+    towards the next round baguette, with what that one brings."""
     n, who, d = STATE["baguettes"], STATE.get("last_feeder"), MOOD["days"]
     unit = f"{n} baguette{'s' if n != 1 else ''}"
     if n == 0 or d is None:
@@ -214,12 +239,29 @@ def counter(th):
     else:
         full = f"{unit} so far · the last one came from @{who}"
         short = ellipsize(f"{unit} · last from @{who}", "ms400", 12, FIT["n"] - 8)
-    h = 20
-    y = h / 2 + cap_height("ms400", 12) / 2
+    h = 40
+    y = 10 + cap_height("ms400", 12) / 2
     text = (f'<text class="{{c}}" x="50%" y="{y:.1f}" text-anchor="middle" style="{fam("ms400")};font-size:12px" '
             f'fill="{th["fgMuted"]}">{{t}}</text>')
     body = text.format(c="L w m s", t=esc(full)) + text.format(c="L n", t=esc(short))
-    return fluid(h, body, fonts_css({"ms400": full + short}), full), full, h
+
+    step, sing = CFG.get("milestone_every", 10), CFG.get("sing_after", 25)
+    done = step if n and n % step == 0 else n % step  # a round baguette shows the scale full
+    if n and n % step == 0:
+        note = f"baguette {n}, a round one"
+    elif n < sing:
+        note = f"{sing - n} more and she sings"
+    else:
+        note = f"{step - done} more to baguette {n - done + step}"
+    pw, gap, ph = 8, 3, 4
+    scale_w = step * pw + (step - 1) * gap
+    x0 = -(scale_w + 10 + measure(note, "ms400", 11)) / 2  # pips and note centred as one group
+    pips = "".join(f'<rect x="{x0 + i * (pw + gap):.1f}" y="{30 - ph / 2}" width="{pw}" height="{ph}" rx="{ph / 2}" '
+                   + (f'fill="{th["teto"]}"/>' if i < done else f'fill="{th["rest"]}" fill-opacity=".5"/>') for i in range(step))
+    body += anchor("50%", pips + f'<text x="{x0 + scale_w + 10:.1f}" y="{30 + cap_height("ms400", 11) / 2:.1f}" '
+                                 f'style="{fam("ms400")};font-size:11px" fill="{th["fgMuted"]}">{esc(note)}</text>')
+    alt = f"{full}; {note}"
+    return fluid(h, body, fonts_css({"ms400": full + short + note}), alt), alt, h
 
 
 def mark(th, mid):
@@ -309,7 +351,13 @@ def row(th, i, p, meta):
     st, ty = str(stars), cap_height("ms400", 12) / 2
     used["ms400"] += st + lang
     label = f'<text x="{{x:.1f}}" y="{ty:.1f}" style="{fam("ms400")};font-size:12px" fill="{th["fgMuted"]}">{{t}}</text>'
-    m = (f'<circle cx="{meta["lang"] + 5:.1f}" cy="0" r="5" fill="{share_color(th, lang)}"/>'
+    fresh = r.get("pushedAt") and (NOW - parse_time(r["pushedAt"])).days < CFG.get("fresh_days", 7)
+    if fresh:  # pushed to within the last week: a ring keeps spreading from the language dot
+        css += ("@keyframes pl{0%{transform:scale(1);opacity:.7}70%,100%{transform:scale(2.3);opacity:0}}"
+                ".pl{transform-box:fill-box;transform-origin:center;animation:pl 2.4s ease-out infinite}"
+                "@media (prefers-reduced-motion:reduce){.pl{display:none}}")
+    m = ((f'<circle class="pl" cx="{meta["lang"] + 5:.1f}" cy="0" r="5" fill="{share_color(th, lang)}"/>' if fresh else "")
+         + f'<circle cx="{meta["lang"] + 5:.1f}" cy="0" r="5" fill="{share_color(th, lang)}"/>'
          + label.format(x=meta["lang"] + 16, t=esc(lang))
          + STAR.format(x=f"{meta['star']:.1f}", y="-6", s=0.75, c=th["fgMuted"])
          + label.format(x=meta["star"] + 16, t=st)
@@ -420,29 +468,52 @@ def activity(th):
 
 
 # ---------------------------------------------------------------- guests
-VERB = {"feed": "fed her", "poke": "poked her", "news": "asked what's new"}
+VERB = {"feed": "fed her", "poke": "poked her", "news": "asked what's new", "sing": "asked for a song"}
 
 
-def guest(th, g):
+def guest_list():
+    """The last visitors, newest first. Whoever has fed Teto the most always stands first, wearing a
+    crown, even when their last visit is too long ago to be in the list. -> [(guest, baguettes or None)]"""
+    guests = list(STATE.get("guests") or [])
+    top = top_feeder(STATE)
+    if not top:
+        return [(g, None) for g in guests]
+    first = next((g for g in guests if g["user"].lower() == top[0].lower()), {"user": top[0], "action": "feed"})
+    rest = [g for g in guests if g is not first][: CFG.get("guests_shown", 8) - 1]
+    return [(first, top[1])] + [(g, None) for g in rest]
+
+
+def guest_title(g, most):
+    if most:
+        return f"@{g['user']} has fed her the most: {most} baguette{'s' if most != 1 else ''}"
+    return f"@{g['user']} {VERB.get(g['action'], 'was here')}"
+
+
+def guest(th, g, most=None):
     """One of the last visitors: a round avatar in a ring, Teto red if they fed her. The avatar is
-    embedded from teto/guests/; until it has been fetched, the first letter of the login stands in."""
-    size, r = 34, 13
-    c = size / 2
+    embedded from teto/guests/; until it has been fetched, the first letter of the login stands in.
+    most: this is the top feeder, who gets a small crown on the ring."""
+    w, h, r = 34, 38, 13
+    cx, cy = w / 2, h - w / 2
     uri, css = avatar_uri(g["user"]), ""
     if uri:
-        face = (f'<clipPath id="c"><circle cx="{c}" cy="{c}" r="{r}"/></clipPath>'
-                f'<image href="{uri}" x="{c - r}" y="{c - r}" width="{2 * r}" height="{2 * r}" clip-path="url(#c)" '
+        face = (f'<clipPath id="c"><circle cx="{cx}" cy="{cy}" r="{r}"/></clipPath>'
+                f'<image href="{uri}" x="{cx - r}" y="{cy - r}" width="{2 * r}" height="{2 * r}" clip-path="url(#c)" '
                 f'preserveAspectRatio="xMidYMid slice"/>')
     else:
         letter = g["user"][0].upper()
         css = fonts_css({"ms600": letter})
-        face = (f'<circle cx="{c}" cy="{c}" r="{r}" fill="{th["rest"]}" fill-opacity=".5"/>'
-                f'<text x="{c}" y="{c + cap_height("ms600", 13) / 2:.1f}" text-anchor="middle" '
+        face = (f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{th["rest"]}" fill-opacity=".5"/>'
+                f'<text x="{cx}" y="{cy + cap_height("ms600", 13) / 2:.1f}" text-anchor="middle" '
                 f'style="{fam("ms600")};font-size:13px" fill="{th["fg"]}">{esc(letter)}</text>')
     ring = th["teto"] if g["action"] == "feed" else th["border"]
-    body = face + f'<circle cx="{c}" cy="{c}" r="{r + 2.75}" fill="none" stroke="{ring}" stroke-width="1.5"/>'
-    alt = f"@{g['user']} {VERB.get(g['action'], 'was here')}"
-    return svg(size, size, body, css, alt), alt, size
+    body = face + f'<circle cx="{cx}" cy="{cy}" r="{r + 2.75}" fill="none" stroke="{ring}" stroke-width="1.5"/>'
+    if most:
+        # three points on a band, with a rim in the page colour so it reads against the ring it sits on
+        body += (f'<path d="M{cx - 7} 9.5 L{cx - 7} 2.5 L{cx - 3.5} 6 L{cx} 1 L{cx + 3.5} 6 L{cx + 7} 2.5 L{cx + 7} 9.5 Z" '
+                 f'fill="{th["teto"]}" stroke="{th["canvas"]}" stroke-width="2" stroke-linejoin="round" paint-order="stroke"/>')
+    alt = guest_title(g, most)
+    return svg(w, h, body, css, alt), alt, h
 
 
 # ---------------------------------------------------------------- headers for the projects' own READMEs
@@ -545,12 +616,13 @@ def slug(name):
 def banner():
     """The banner for Teto's mood and the reader's theme and motion setting. A mood whose
     banner has not been rendered yet (teto/banner/make.sh) falls back to the everyday one."""
-    base = "banner" + ("-birthday" if MOOD["birthday"] else "-hungry" if MOOD["hungry"] else "")
+    kind = "birthday" if MOOD["birthday"] else "happy" if MOOD["happy"] else MOOD["season"] or ("hungry" if MOOD["hungry"] else "")
+    base = "banner" + (f"-{kind}" if kind else "")
     if not all((OUT / f).exists() for f in (f"{base}.webp", f"{base}-static.png", f"{base}-light.webp", f"{base}-light-static.png")):
         base = "banner"
     alt = "Kasane Teto pressed against the glass of your screen, project cards floating around her"
-    if base.endswith("birthday"):
-        alt += ", confetti falling: it is her birthday"
+    alt += {"banner-birthday": ", confetti falling: it is her birthday", "banner-happy": ", sparkling: she has just been fed",
+            "banner-snow": ", snow falling", "banner-sakura": ", cherry petals falling"}.get(base, "")
     at = "./assets/teto/" + base
     return (f'<picture>\n'
             f'    <source media="(prefers-color-scheme: light) and (prefers-reduced-motion: reduce)" srcset="{at}-light-static.png">\n'
@@ -586,19 +658,21 @@ def main():
            "sep_stack": picture("sep-stack", lambda th: separator(th, "STACK", 42 if has_activity else 20)),
            "stack": picture("stack", stack), "footer": picture("footer", footer)}
 
-    buttons = (("feed", "Feed her a baguette", "🥖 A baguette for Teto."), ("news", "What's new?", "Teto, what's new?"),
-               ("poke", "Poke", "*poke*"))
+    buttons = [("feed", "Feed her a baguette", "🥖 A baguette for Teto."), ("news", "What's new?", "Teto, what's new?"),
+               ("poke", "Poke", "*poke*")]
+    if STATE.get("baguettes", 0) >= CFG.get("sing_after", 25):  # nobody is told about this one beforehand
+        buttons.append(("sing", "Ask her to sing", "Teto, sing something."))
     ctx["buttons"] = "\n  ".join(
         f'<a href="{issue_url(key, prompt)}">'
         + picture(f"btn-{key}", lambda th, label=label, key=key: button(th, label, primary=key == "feed"), full_width=False)
         + "</a>" for key, label, prompt in buttons)
 
-    # the last visitors, newest first, each linked to their profile
-    guests = STATE.get("guests") or []
+    # the last visitors, each linked to their profile
+    guests = guest_list()
     ctx["guests"] = "" if not guests else "\n  <br>\n  " + "\n  ".join(
-        f'<a href="https://github.com/{g["user"]}" title="@{g["user"]} {VERB.get(g["action"], "was here")}">'
-        + picture(f"guest-{slug(g['user'])}", lambda th, g=g: guest(th, g), full_width=False)
-        + "</a>" for g in guests)
+        f'<a href="https://github.com/{g["user"]}" title="{esc(guest_title(g, most))}">'
+        + picture(f"guest-{slug(g['user'])}", lambda th, g=g, most=most: guest(th, g, most), full_width=False)
+        + "</a>" for g, most in guests)
 
     meta = meta_columns()
     ctx["rows"] = "<br>\n  ".join(

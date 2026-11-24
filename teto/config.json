@@ -29,5 +29,9 @@
   "languages_top": 5,
   "hungry_after_days": 3,
   "guests_shown": 8,
+  "milestone_every": 10,
+  "sing_after": 25,
+  "fresh_days": 7,
+  "big_day": 30,
   "credits": "Kasane Teto © TWINDRILL · banner rendered with canvas + ffmpeg · Teto replies in about a minute"
 }
