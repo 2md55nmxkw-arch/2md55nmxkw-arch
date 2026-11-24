@@ -7,5 +7,13 @@
     "user": "2md55nmxkw-arch",
     "at": "2026-11-23T06:28:42Z"
   },
-  "events": 3
+  "events": 3,
+  "last_fed_at": "2026-11-23T06:28:42Z",
+  "guests": [
+    {
+      "user": "2md55nmxkw-arch",
+      "action": "feed",
+      "at": "2026-11-23T06:28:42Z"
+    }
+  ]
 }

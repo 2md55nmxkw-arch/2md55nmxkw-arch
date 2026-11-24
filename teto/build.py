@@ -3,30 +3,42 @@
     python teto/build.py
 
 Inputs: teto/config.json (what to show), teto/data.json (GitHub numbers, see fetch.py),
-teto/state.json (Teto's mood, see interact.py). Output: assets/teto/*.svg with content-hashed
-names (so GitHub's image cache never serves a stale copy) and README.md.
+teto/state.json (baguettes, guests, Teto's last reply, see interact.py). Output: assets/teto/*.svg
+with content-hashed names (so GitHub's image cache never serves a stale copy) and README.md.
+
+Teto has moods (lib.mood). Hungry: nobody fed her for a few days, so she says so, the feed button
+breathes and the banner loses its glow. Birthday: April 1st, with its own line, a banner with
+confetti and a highlighted 0401. TETO_NOW=2027-04-01T03:00:00Z python teto/build.py previews a date.
+
+assets/teto/header-<repo>-dark.svg / -light.svg are headers for the projects' own READMEs, and
+ribbon-<repo>-*.svg is just their first line, for a README that already has a header of its own.
+Their names are stable, because those READMEs link to them from another repository.
 
 Full-width pieces are fluid (lib.fluid): they keep their pixel height and real text size at any
 column width and switch layout on their own, from wide down to phone-narrow. They share
 one edge grid: content starts at x=0 and ends at 100%, so every block lines up with the others.
 """
-import datetime as dt
 import re
 import urllib.parse
 
-from lib import (ARROW, FIT, REPO, STAR, THEMES, anchor, balance, cap_height, char_widths, ellipsize,
-                 esc, fam, fluid, fonts_css, load_json, measure, short_hash, svg, tier_css, wrap, wrap_max)
+from lib import (ARROW, FIT, REPO, STAR, THEMES, anchor, avatar_uri, balance, cap_height, char_widths, ellipsize,
+                 esc, fam, fluid, fonts_css, load_json, measure, mood, now, parse_time, short_hash, svg, tier_css,
+                 wrap, wrap_max)
 
 OUT = REPO / "assets" / "teto"
 CFG = load_json("config.json")
 DATA = load_json("data.json")
 STATE = load_json("state.json")
-NOW = dt.datetime.now(dt.timezone.utc)
+NOW = now()
+MOOD = mood(STATE, CFG, NOW)
+# a configured repo that GitHub no longer returns (deleted, renamed, made private) is left out
+# instead of becoming a row with a dead link; with no data at all, everything is shown
+PROJECTS = [p for p in CFG["projects"] if p["repo"] in DATA["repos"]] or CFG["projects"]
 
 
 # ---------------------------------------------------------------- lines Teto says
 def ago(iso):
-    d = (NOW - dt.datetime.fromisoformat(iso.replace("Z", "+00:00"))).days
+    d = (NOW - parse_time(iso)).days
     if d <= 0:
         return "today"
     if d == 1:
@@ -42,7 +54,7 @@ def ago(iso):
 
 def activity_line():
     best = None
-    for p in CFG["projects"]:
+    for p in PROJECTS:
         r = DATA["repos"].get(p["repo"])
         if r and r.get("pushedAt") and (best is None or r["pushedAt"] > best[1]["pushedAt"]):
             best = (p, r)
@@ -54,6 +66,31 @@ def activity_line():
     if wc:
         line += f" {wc} contributions this week."
     return line
+
+
+HUNGRY = ("{d} days without a baguette. I'm counting.",
+          "Day {d} with no bread. My drills are starting to droop.",
+          "It has been {d} days. The red button is right there.")
+BIRTHDAY = "It's April 1st, my birthday. I started out as a joke and I'm still here."
+
+
+def spoken_lines():
+    """What the dialogue types: who this is, the latest push, Teto's last reply. On her birthday she
+    opens with that. When she is hungry and nobody has talked to her for a day, she says so instead
+    of repeating the old reply (a fresh reply stays, so a poke still shows up on the profile)."""
+    first = BIRTHDAY if MOOD["birthday"] else CFG["intro"]
+    last = STATE["reply"]
+    event = STATE.get("last_event")
+    quiet = not event or (NOW - parse_time(event["at"])).days >= 1
+    if MOOD["hungry"] and quiet:
+        d = MOOD["days"]
+        if d is None:
+            last = "Nobody has fed me yet. The red button is right there."
+        elif MOOD["birthday"]:
+            last = f"It's my birthday and I haven't had a baguette for {d} days."
+        else:
+            last = HUNGRY[d % len(HUNGRY)].format(d=d)
+    return [first, activity_line(), last]
 
 
 # ---------------------------------------------------------------- language shares
@@ -80,7 +117,7 @@ DIALOGUE = (("w", 22, 32, 660), ("m", 20, 30, FIT["m"] - 40), ("s", 19, 28, FIT[
 
 
 def dialogue(th):
-    lines = [CFG["intro"], activity_line(), STATE["reply"]]
+    lines = spoken_lines()
     laid = [(cls, size, lh, [wrap(t, "ms500", size, max_w) for t in lines]) for cls, size, lh, max_w in DIALOGUE]
     # one height for every layout: fewer, longer lines when wide; more, shorter ones when narrow
     H = round(max((max(len(g) for g in groups) - 1) * lh + size for _, size, lh, groups in laid) + 30)
@@ -144,26 +181,37 @@ def dialogue(th):
 def button(th, label, primary=False):
     """The primary button is filled Teto red, the others are outlines. 2px of air on each side is
     part of the image, which with the space between the <img> tags makes an 8px gap. Padding and
-    air are sized so the three buttons still share one line in a 328px column (a 360px phone)."""
+    air are sized so the three buttons still share one line in a 328px column (a 360px phone).
+    While Teto is hungry the primary button breathes."""
     size, h, mx, pad = 13, 32, 2, 12
     w = round(measure(label, "ms500", size) + 2 * pad) + 2 * mx
+    css = ""
     if primary:
-        box, ink = f'<rect x="{mx}" width="{w - 2 * mx}" height="{h}" rx="6" fill="{th["btn"]}"/>', th["btnFg"]
+        box, ink = f'<rect class="hp" x="{mx}" width="{w - 2 * mx}" height="{h}" rx="6" fill="{th["btn"]}"/>', th["btnFg"]
+        if MOOD["hungry"]:
+            css = ("@keyframes hp{0%,100%{opacity:1}50%{opacity:.62}}.hp{animation:hp 1.8s ease-in-out infinite}"
+                   "@media (prefers-reduced-motion:reduce){.hp{animation:none}}")
     else:
         box = (f'<rect x="{mx + .5}" y=".5" width="{w - 2 * mx - 1}" height="{h - 1}" rx="5.5" fill="none" '
                f'stroke="{th["border"]}"/>')
         ink = th["fg"]
     body = (f'{box}<text x="{mx + pad}" y="{h / 2 + cap_height("ms500", size) / 2:.1f}" '
             f'style="{fam("ms500")};font-size:{size}px" fill="{ink}">{esc(label)}</text>')
-    return svg(w, h, body, fonts_css({"ms500": label}), label), label, h
+    return svg(w, h, body, fonts_css({"ms500": label}) + css, label), label, h
 
 
 def counter(th):
-    n, who = STATE["baguettes"], STATE.get("last_feeder")
-    if n == 0:
+    n, who, d = STATE["baguettes"], STATE.get("last_feeder"), MOOD["days"]
+    unit = f"{n} baguette{'s' if n != 1 else ''}"
+    if n == 0 or d is None:
         full = short = "No baguettes yet · be the first to feed her"
+    elif MOOD["birthday"] and MOOD["hungry"]:
+        full, short = f"{unit} so far · it's her birthday and she's hungry", f"{unit} · birthday, and hungry"
+    elif MOOD["birthday"]:
+        full, short = f"{unit} so far · today is her birthday", f"{unit} · it's her birthday"
+    elif MOOD["hungry"]:
+        full, short = f"{unit} so far · she hasn't eaten for {d} days", f"{unit} · hungry for {d} days"
     else:
-        unit = f"{n} baguette{'s' if n != 1 else ''}"
         full = f"{unit} so far · the last one came from @{who}"
         short = ellipsize(f"{unit} · last from @{who}", "ms400", 12, FIT["n"] - 8)
     h = 20
@@ -174,19 +222,35 @@ def counter(th):
     return fluid(h, body, fonts_css({"ms400": full + short}), full), full, h
 
 
+def mark(th, mid):
+    """0401 on the right edge at height mid, and the width it takes. On Teto's birthday it is
+    highlighted: page-coloured digits on a red block."""
+    tw = measure("0401", "stencil", 15, 0.9) - 0.9
+    y = mid + cap_height("stencil", 15) / 2
+    style = f'style="{fam("stencil")};font-size:15px;letter-spacing:.9px"'
+    if not MOOD["birthday"]:
+        return anchor("100%", f'<text x="{-tw:.1f}" y="{y:.1f}" {style} fill="{th["teto"]}">0401</text>'), tw
+    w = tw + 12
+    return anchor("100%", f'<rect x="{-w:.1f}" y="{mid - 9}" width="{w:.1f}" height="18" rx="4" fill="{th["teto"]}"/>'
+                          f'<text x="{-w + 6:.1f}" y="{y:.1f}" {style} fill="{th["canvas"]}">0401</text>'), w
+
+
+def rule_row(th, mid, x, label):
+    """Tracked label starting at x, a rule, and the 0401 mark: the line every section opens with."""
+    lw = measure(label, "ms600", 11, 1.76)
+    m, mw = mark(th, mid)
+    r = mw + 12  # what the rule leaves free for 0401
+    return (f'<text x="{x:.1f}" y="{mid + cap_height("ms600", 11) / 2:.1f}" style="{fam("ms600")};font-size:11px;letter-spacing:1.76px" '
+            f'fill="{th["fgMuted"]}">{esc(label)}</text>'
+            # x2 is the right edge; shifting the whole line left by r makes it stop short of 0401
+            f'<line x1="{x + lw + 12 + r:.1f}" y1="{mid + .5}" x2="100%" y2="{mid + .5}" transform="translate({-r:.1f},0)" '
+            f'stroke="{th["border"]}" stroke-opacity=".7"/>' + m)
+
+
 def separator(th, label, pad):
     """Section label, a rule, and 0401 on the right edge. pad is the air above it."""
     h, mid = pad + 14, pad + 7
-    lw = measure(label, "ms600", 11, 1.76)
-    r = measure("0401", "stencil", 15, 0.9) + 12  # what the rule leaves free for 0401
-    body = (f'<text x="0" y="{mid + cap_height("ms600", 11) / 2:.1f}" style="{fam("ms600")};font-size:11px;letter-spacing:1.76px" '
-            f'fill="{th["fgMuted"]}">{esc(label)}</text>'
-            # x2 is the right edge; shifting the whole line left by r makes it stop short of 0401
-            f'<line x1="{lw + 12 + r:.1f}" y1="{mid + .5}" x2="100%" y2="{mid + .5}" transform="translate({-r:.1f},0)" '
-            f'stroke="{th["border"]}" stroke-opacity=".7"/>'
-            f'<text x="100%" dx=".9" y="{mid + cap_height("stencil", 15) / 2:.1f}" text-anchor="end" '
-            f'style="{fam("stencil")};font-size:15px;letter-spacing:.9px" fill="{th["teto"]}">0401</text>')
-    return fluid(h, body, fonts_css({"ms600": label, "stencil": "0401"}), label.title()), label.title(), h
+    return fluid(h, rule_row(th, mid, 0, label), fonts_css({"ms600": label, "stencil": "0401"}), label.title()), label.title(), h
 
 
 # ---------------------------------------------------------------- project rows
@@ -196,7 +260,7 @@ ROW_H = 84
 def meta_columns():
     """x of the language dot and the star, counted back from the right edge. One layout for every
     row (the widest language and star count decide), so the columns line up down the list."""
-    rows = [DATA["repos"].get(p["repo"], {}) for p in CFG["projects"]]
+    rows = [DATA["repos"].get(p["repo"], {}) for p in PROJECTS]
     stw = max((measure(str(r.get("stars", 0)), "ms400", 12) for r in rows), default=8)
     lw = max((measure(r.get("language") or "—", "ms400", 12) for r in rows), default=24)
     star = -(7.5 + 16 + stw + 4 + 12)  # arrow ink, gap, count, gap, star
@@ -298,6 +362,141 @@ def chip(th, name, pct):
     return svg(w, h, body, fonts_css({"ms500": name, "ms400": label}), alt), alt, h
 
 
+# ---------------------------------------------------------------- activity
+STRIP_Y, STRIP_H = 24, 10
+
+
+def levels(values):
+    """0 for an empty cell, else 1-4 by quartile among the cells that have something."""
+    busy = sorted(v for v in values if v > 0)
+    if not busy:
+        return [0] * len(values)
+    cuts = [busy[int((len(busy) - 1) * f)] for f in (0.25, 0.5, 0.75)]
+    return [0 if v == 0 else 1 + sum(v > c for c in cuts) for v in values]
+
+
+def level_fill(th, level):
+    """More contributions sit further from the page colour; an empty cell is a faint neutral."""
+    if level == 0:
+        return f'fill="{th["rest"]}" fill-opacity=".45"'
+    return f'fill="{th["ramp"][4 - level]}"'
+
+
+def strip(th, values, gap, mask_id):
+    """A row of equal cells across the full width, cut apart by a mask like the stack bar."""
+    n = len(values)
+    cells = "".join(f'<rect x="{i * 100 / n:.3f}%" y="{STRIP_Y}" width="{100 / n:.3f}%" height="{STRIP_H}" {level_fill(th, lv)}/>'
+                    for i, lv in enumerate(levels(values)))
+    cuts = "".join(f'<rect x="{i * 100 / n:.3f}%" y="{STRIP_Y}" width="{gap}" height="{STRIP_H}" transform="translate({-gap / 2},0)"/>'
+                   for i in range(1, n))
+    return (f'<mask id="{mask_id}"><rect y="{STRIP_Y}" width="100%" height="{STRIP_H}" rx="3" fill="#fff"/>{cuts}</mask>'
+            f'<g mask="url(#{mask_id})">{cells}</g>')
+
+
+def activity(th):
+    """The last 12 weeks, oldest on the left: a cell per day, or a cell per week where the column
+    is too narrow for 84 of them. The caption carries the number; the key reads less to more."""
+    days = (DATA.get("activity") or [])[-84:]
+    weeks = [sum(days[max(0, i - 7):i]) for i in range(len(days), 0, -7)][::-1]  # counted back from today
+    total = sum(days)
+    h = STRIP_Y + STRIP_H + 32
+    y = STRIP_Y + STRIP_H + 22
+    n = f"{total:,}"
+    nw = measure(n, "ms500", 12)
+    tail = {"L w m s": "contributions in the last 12 weeks", "L n": "contributions · 12 weeks"}
+    body = [f'<g class="L w m">{strip(th, days, 2, "d")}</g>', f'<g class="L s n">{strip(th, weeks, 3, "k")}</g>',
+            f'<text x="0" y="{y}" style="{fam("ms500")};font-size:12px" fill="{th["fg"]}">{n}</text>']
+    body += [f'<text class="{cls}" x="{nw + 4:.1f}" y="{y}" style="{fam("ms400")};font-size:12px" fill="{th["fgMuted"]}">{esc(t)}</text>'
+             for cls, t in tail.items()]
+    # key on the right edge: less, five swatches, more
+    more_w = measure("more", "ms400", 12)
+    x = -(more_w + 6 + 5 * 11 - 3)
+    key = [f'<text x="{x - 6:.1f}" y="{y}" text-anchor="end" style="{fam("ms400")};font-size:12px" fill="{th["fgMuted"]}">less</text>']
+    key += [f'<rect x="{x + i * 11:.1f}" y="{y - 8.5}" width="8" height="8" rx="2" {level_fill(th, i)}/>' for i in range(5)]
+    key.append(f'<text x="{-more_w:.1f}" y="{y}" style="{fam("ms400")};font-size:12px" fill="{th["fgMuted"]}">more</text>')
+    body.append(anchor("100%", "".join(key)))
+    alt = f"{n} contributions in the last 12 weeks"
+    return fluid(h, "".join(body), fonts_css({"ms500": n, "ms400": "".join(tail.values()) + "lessmore"}), alt), alt, h
+
+
+# ---------------------------------------------------------------- guests
+VERB = {"feed": "fed her", "poke": "poked her", "news": "asked what's new"}
+
+
+def guest(th, g):
+    """One of the last visitors: a round avatar in a ring, Teto red if they fed her. The avatar is
+    embedded from teto/guests/; until it has been fetched, the first letter of the login stands in."""
+    size, r = 34, 13
+    c = size / 2
+    uri, css = avatar_uri(g["user"]), ""
+    if uri:
+        face = (f'<clipPath id="c"><circle cx="{c}" cy="{c}" r="{r}"/></clipPath>'
+                f'<image href="{uri}" x="{c - r}" y="{c - r}" width="{2 * r}" height="{2 * r}" clip-path="url(#c)" '
+                f'preserveAspectRatio="xMidYMid slice"/>')
+    else:
+        letter = g["user"][0].upper()
+        css = fonts_css({"ms600": letter})
+        face = (f'<circle cx="{c}" cy="{c}" r="{r}" fill="{th["rest"]}" fill-opacity=".5"/>'
+                f'<text x="{c}" y="{c + cap_height("ms600", 13) / 2:.1f}" text-anchor="middle" '
+                f'style="{fam("ms600")};font-size:13px" fill="{th["fg"]}">{esc(letter)}</text>')
+    ring = th["teto"] if g["action"] == "feed" else th["border"]
+    body = face + f'<circle cx="{c}" cy="{c}" r="{r + 2.75}" fill="none" stroke="{ring}" stroke-width="1.5"/>'
+    alt = f"@{g['user']} {VERB.get(g['action'], 'was here')}"
+    return svg(size, size, body, css, alt), alt, size
+
+
+# ---------------------------------------------------------------- headers for the projects' own READMEs
+def project_line(th, i, used):
+    """The profile's section line for a project: its number in the list, whose project it is, a rule, 0401."""
+    idx, label = f"{i + 1:02d}", f"{CFG.get('name') or CFG['owner']} · PROJECT".upper()
+    used["mono"] = used.get("mono", "") + idx
+    used["ms600"] = used.get("ms600", "") + label
+    used["stencil"] = "0401"
+    return (f'<text x="0" y="{14 + cap_height("mono", 12) / 2:.1f}" style="{fam("mono")};font-size:12px" fill="{th["teto"]}">{idx}</text>'
+            + rule_row(th, 14, measure(idx, "mono", 12) + 10, label))
+
+
+def ribbon(th, i, p):
+    """Only the section line: for a README that has its own logo and title."""
+    used = {}
+    alt = f"{p['repo']} is project {i + 1:02d} of {CFG.get('name') or CFG['owner']}"
+    return fluid(28, project_line(th, i, used), fonts_css(used), alt), alt, 28
+
+
+def header(th, i, p):
+    """The section line, then the project's name, description and language. Fluid like the
+    rest, so it fits any README column."""
+    name, text = p["repo"], p["description"]
+    lang = (DATA["repos"].get(p["repo"]) or {}).get("language")
+    used = {"ms400": lang or ""}
+    parts = [project_line(th, i, used)]
+    # layouts, title size, title baseline, description size, line height, description lines
+    layouts = (("w m", 30, 68, 15, 22, [ellipsize(text, "ms400", 15, FIT["m"])]),
+               ("s", 26, 64, 14, 20, wrap_max(text, "ms400", 14, FIT["s"], 2)),
+               ("n", 22, 60, 13, 18, wrap_max(text, "ms400", 13, FIT["n"], 2)))
+    foot = {}
+    for cls, ts, y, ds, lh, lines in layouts:
+        title = ellipsize(name, "ms600", ts, FIT[cls.split()[-1]])
+        parts.append(f'<text class="L {cls}" x="0" y="{y}" style="{fam("ms600")};font-size:{ts}px" fill="{th["fg"]}">{esc(title)}</text>')
+        for li, line in enumerate(lines):
+            parts.append(f'<text class="L {cls}" x="0" y="{y + ds + 11 + li * lh}" style="{fam("ms400")};font-size:{ds}px" '
+                         f'fill="{th["fgMuted"]}">{esc(line)}</text>')
+        used["ms600"] += title
+        used["ms400"] += "".join(lines)
+        for one in cls.split():
+            foot[one] = y + ds + 11 + (len(lines) - 1) * lh + 24  # centre of the language line
+    h = round(max(foot.values()) + 22)
+    css = ""
+    if lang:
+        parts.append(f'<g class="lang"><circle cx="5" cy="0" r="5" fill="{share_color(th, lang)}"/>'
+                     f'<text x="16" y="{cap_height("ms400", 12) / 2:.1f}" style="{fam("ms400")};font-size:12px" '
+                     f'fill="{th["fgMuted"]}">{esc(lang)}</text></g>')
+        css = tier_css(".lang", "transform", {c: f"translateY({v}px)" for c, v in foot.items()})
+    parts.append(f'<rect y="{h - 1}" width="100%" height="1" fill="{th["border"]}" fill-opacity=".5"/>')
+    alt = f"{name}: {text}"
+    return fluid(h, "".join(parts), fonts_css(used) + css, alt), alt, h
+
+
 # ---------------------------------------------------------------- footer
 def footer(th):
     t = CFG["credits"]
@@ -305,16 +504,30 @@ def footer(th):
     size, lh, top = 12, 18, 40
     laid = [(cls, balance(segs, " · ", "ms400", size, max_w))
             for cls, max_w in (("w m", 520), ("s", FIT["s"] - 40), ("n", FIT["n"] - 16))]
-    y0 = top + cap_height("stencil", 30)
-    y1 = y0 + 28
+    cap = cap_height("stencil", 30)
+    big = f'style="{fam("stencil")};font-size:30px;letter-spacing:1.8px"'
+    used = {"stencil": "0401", "ms400": t}
+    if MOOD["birthday"]:
+        # the day the number stands for: 0401 on a red block, and a line under it
+        wish = "HAPPY BIRTHDAY, TETO"
+        bw = measure("0401", "stencil", 30, 1.8) - 1.8 + 32
+        y0 = top + 22 + cap / 2
+        body = [anchor("50%", f'<rect x="{-bw / 2:.1f}" y="{top}" width="{bw:.1f}" height="44" rx="8" fill="{th["teto"]}"/>'),
+                f'<text x="50%" dx=".9" y="{y0:.1f}" text-anchor="middle" {big} fill="{th["canvas"]}">0401</text>',
+                f'<text x="50%" dx=".9" y="{top + 44 + 24}" text-anchor="middle" style="{fam("ms600")};font-size:11px;letter-spacing:1.76px" '
+                f'fill="{th["fg"]}">{wish}</text>']
+        used["ms600"] = wish
+        y1 = top + 44 + 24 + 26
+    else:
+        y0 = top + cap
+        body = [f'<text x="50%" dx=".9" y="{y0:.1f}" text-anchor="middle" {big} fill="{th["teto"]}">0401</text>']
+        y1 = y0 + 28
     h = round(y1 + (max(len(lines) for _, lines in laid) - 1) * lh + 10)
-    body = [f'<text x="50%" dx=".9" y="{y0:.1f}" text-anchor="middle" style="{fam("stencil")};font-size:30px;letter-spacing:1.8px" '
-            f'fill="{th["teto"]}">0401</text>']
     for cls, lines in laid:
         for li, line in enumerate(lines):
             body.append(f'<text class="L {cls}" x="50%" y="{y1 + li * lh:.1f}" text-anchor="middle" '
                         f'style="{fam("ms400")};font-size:{size}px" fill="{th["fgMuted"]}">{esc(line)}</text>')
-    return fluid(h, "".join(body), fonts_css({"stencil": "0401", "ms400": t}), t), t, h
+    return fluid(h, "".join(body), fonts_css(used), t), t, h
 
 
 # ---------------------------------------------------------------- write
@@ -323,6 +536,28 @@ def issue_url(action, prompt):
             "Please don't change the title.")
     q = urllib.parse.urlencode({"title": f"teto|{action}", "body": body})
     return f"https://github.com/{CFG['owner']}/{CFG['repo']}/issues/new?{q}"
+
+
+def slug(name):
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def banner():
+    """The banner for Teto's mood and the reader's theme and motion setting. A mood whose
+    banner has not been rendered yet (teto/banner/make.sh) falls back to the everyday one."""
+    base = "banner" + ("-birthday" if MOOD["birthday"] else "-hungry" if MOOD["hungry"] else "")
+    if not all((OUT / f).exists() for f in (f"{base}.webp", f"{base}-static.png", f"{base}-light.webp", f"{base}-light-static.png")):
+        base = "banner"
+    alt = "Kasane Teto pressed against the glass of your screen, project cards floating around her"
+    if base.endswith("birthday"):
+        alt += ", confetti falling: it is her birthday"
+    at = "./assets/teto/" + base
+    return (f'<picture>\n'
+            f'    <source media="(prefers-color-scheme: light) and (prefers-reduced-motion: reduce)" srcset="{at}-light-static.png">\n'
+            f'    <source media="(prefers-reduced-motion: reduce)" srcset="{at}-static.png">\n'
+            f'    <source media="(prefers-color-scheme: light)" srcset="{at}-light.webp">\n'
+            f'    <img src="{at}.webp" width="100%" alt="{esc(alt)}">\n'
+            f'  </picture>')
 
 
 def main():
@@ -343,10 +578,12 @@ def main():
                 f'<source media="(prefers-color-scheme: light)" srcset="{src["light"]}">'
                 f'<img src="{src["dark"]}" {size} alt="{esc(alt)}"></picture>')
 
-    ctx = {"dialogue": picture("dialogue", dialogue), "counter": picture("counter", counter),
+    has_activity = len(DATA.get("activity") or []) >= 14
+    ctx = {"banner": banner(), "dialogue": picture("dialogue", dialogue), "counter": picture("counter", counter),
            "sep_projects": picture("sep-projects", lambda th: separator(th, "PROJECTS", 42)),
-           # the last project row brings its own 25px of air, the section gap stays the same
-           "sep_stack": picture("sep-stack", lambda th: separator(th, "STACK", 20)),
+           # after the project rows, which bring 25px of air of their own, a separator needs less
+           # above it than after any other block; the gap between sections stays the same
+           "sep_stack": picture("sep-stack", lambda th: separator(th, "STACK", 42 if has_activity else 20)),
            "stack": picture("stack", stack), "footer": picture("footer", footer)}
 
     buttons = (("feed", "Feed her a baguette", "🥖 A baguette for Teto."), ("news", "What's new?", "Teto, what's new?"),
@@ -356,16 +593,32 @@ def main():
         + picture(f"btn-{key}", lambda th, label=label, key=key: button(th, label, primary=key == "feed"), full_width=False)
         + "</a>" for key, label, prompt in buttons)
 
+    # the last visitors, newest first, each linked to their profile
+    guests = STATE.get("guests") or []
+    ctx["guests"] = "" if not guests else "\n  <br>\n  " + "\n  ".join(
+        f'<a href="https://github.com/{g["user"]}" title="@{g["user"]} {VERB.get(g["action"], "was here")}">'
+        + picture(f"guest-{slug(g['user'])}", lambda th, g=g: guest(th, g), full_width=False)
+        + "</a>" for g in guests)
+
     meta = meta_columns()
     ctx["rows"] = "<br>\n  ".join(
         f'<a href="https://github.com/{CFG["owner"]}/{p["repo"]}">'
-        + picture(f"row-{re.sub(r'[^a-z0-9]+', '-', p['repo'].lower())}", lambda th, i=i, p=p: row(th, i, p, meta))
-        + "</a>" for i, p in enumerate(CFG["projects"]))
+        + picture(f"row-{slug(p['repo'])}", lambda th, i=i, p=p: row(th, i, p, meta))
+        + "</a>" for i, p in enumerate(PROJECTS))
+
+    ctx["activity_section"] = "" if not has_activity else (
+        "<p>\n  " + picture("sep-activity", lambda th: separator(th, "ACTIVITY", 20)) + "\n</p>\n\n"
+        "<p>\n  " + picture("activity", activity) + "\n</p>\n\n")
 
     ctx["legend"] = "\n  ".join(
-        picture(f"chip-{re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-') or f'lang{i}'}",
-                lambda th, name=name, pct=pct: chip(th, name, pct), full_width=False)
+        picture(f"chip-{slug(name) or f'lang{i}'}", lambda th, name=name, pct=pct: chip(th, name, pct), full_width=False)
         for i, (name, pct) in enumerate(shares()[0]))
+
+    # headers for the projects' own READMEs: no hash in the name, other repositories link to them
+    for i, p in enumerate(PROJECTS):
+        for theme, th in THEMES.items():
+            files[f"header-{slug(p['repo'])}-{theme}.svg"] = header(th, i, p)[0]
+            files[f"ribbon-{slug(p['repo'])}-{theme}.svg"] = ribbon(th, i, p)[0]
 
     for old in OUT.glob("*.svg"):
         if old.name not in files:
@@ -376,7 +629,7 @@ def main():
     tpl = (REPO / "teto" / "README.template.md").read_text(encoding="utf-8")
     readme = re.sub(r"\{\{(\w+)\}\}", lambda m: ctx[m.group(1)], tpl)
     (REPO / "README.md").write_text(readme, encoding="utf-8")
-    print(f"built {len(files)} svgs, README.md ({len(readme)} bytes)")
+    print(f"built {len(files)} svgs, README.md ({len(readme)} bytes), mood {MOOD}")
 
 
 if __name__ == "__main__":

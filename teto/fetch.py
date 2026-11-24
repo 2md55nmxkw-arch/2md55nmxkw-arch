@@ -3,14 +3,15 @@
     GITHUB_TOKEN=... LOGIN=2md55nmxkw-arch python teto/fetch.py
 
 Public data only: stars, primary language and last push of the configured projects,
-languages by code size across the owner's public non-fork repos, contributions this week.
+languages by code size across the owner's public non-fork repos, contributions per day for
+the last 12 weeks. It also fetches the avatar of any guest in state.json that has none cached.
 """
 import datetime as dt
 import json
 import os
 import urllib.request
 
-from lib import load_json, save_json
+from lib import avatar_file, fetch_avatar, load_json, prune_avatars, save_json
 
 QUERY = """
 query($login: String!) { user(login: $login) {
@@ -63,9 +64,16 @@ def main():
     old = load_json("data.json", {})
     data = {"generated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "repos": repos or old.get("repos", {}), "languages": languages or old.get("languages", []),
-            "week_contributions": week}
+            "week_contributions": week,
+            "activity": [d["contributionCount"] for d in days[-84:]]}  # oldest first, today last
     save_json("data.json", data)
-    print(json.dumps(data, indent=2))
+    print(json.dumps(data))
+
+    guests = [g["user"] for g in (load_json("state.json") or {}).get("guests", [])]
+    for login in guests:
+        if not avatar_file(login):
+            fetch_avatar(login)
+    prune_avatars(guests)
 
 
 if __name__ == "__main__":

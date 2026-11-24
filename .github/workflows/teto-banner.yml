@@ -1,5 +1,6 @@
-# Re-render the animated banner (dark and light) from teto/banner/source/teto-idle.mp4.
-# Run it by hand (Actions → teto banner → Run workflow) after changing render.py or the cards.
+# Re-render the animated banners (every mood, dark and light) from teto/banner/source/teto-idle.mp4.
+# Run it by hand (Actions → teto banner → Run workflow) after changing render.py, or the first two
+# projects in teto/config.json: those are the cards in focus.
 name: teto banner
 
 on:
