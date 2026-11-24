@@ -11,15 +11,15 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: light) and (prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-light-static.png">
-    <source media="(prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-static.png">
-    <source media="(prefers-color-scheme: light)" srcset="./assets/teto/banner-light.webp">
-    <img src="./assets/teto/banner.webp" width="100%" alt="Kasane Teto pressed against the glass of your screen, project cards floating around her">
+    <source media="(prefers-color-scheme: light) and (prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-happy-light-static.png">
+    <source media="(prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-happy-static.png">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/teto/banner-happy-light.webp">
+    <img src="./assets/teto/banner-happy.webp" width="100%" alt="Kasane Teto pressed against the glass of your screen, project cards floating around her, sparkling: she has just been fed">
   </picture>
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-945365f.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-632a04f.svg"><img src="./assets/teto/dialogue-dark-945365f.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, today. The Cmdr panel again, probably. 23 contributions this week. / Mmm, warm bread. Thank you, @RATWareLua~"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-cd06001.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-4e23e3c.svg"><img src="./assets/teto/dialogue-dark-cd06001.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, today. The Cmdr panel again, probably. 6 days in a row. Somebody is on a roll. / Mmm, warm bread. Thank you, @RATWareLua~"></picture>
 </p>
 
 <p align="center">
@@ -27,10 +27,10 @@
   <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=teto%7Cnews&body=Teto%2C+what%27s+new%3F%0A%0AJust+press+%2A%2ACreate%2A%2A.+Teto+answers+here+and+on+the+profile+in+about+a+minute.%0A%0APlease+don%27t+change+the+title."><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/btn-news-dark-9f92784.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/btn-news-light-8446a60.svg"><img src="./assets/teto/btn-news-dark-9f92784.svg" height="32" alt="What's new?"></picture></a>
   <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=teto%7Cpoke&body=%2Apoke%2A%0A%0AJust+press+%2A%2ACreate%2A%2A.+Teto+answers+here+and+on+the+profile+in+about+a+minute.%0A%0APlease+don%27t+change+the+title."><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/btn-poke-dark-2051f74.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/btn-poke-light-76e2354.svg"><img src="./assets/teto/btn-poke-dark-2051f74.svg" height="32" alt="Poke"></picture></a>
   <br>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/counter-dark-15fd28f.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/counter-light-809443f.svg"><img src="./assets/teto/counter-dark-15fd28f.svg" width="100%" height="20" alt="3 baguettes so far · the last one came from @RATWareLua"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/counter-dark-2f7ab6c.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/counter-light-6c93fb5.svg"><img src="./assets/teto/counter-dark-2f7ab6c.svg" width="100%" height="40" alt="3 baguettes so far · the last one came from @RATWareLua; 22 more and she sings"></picture>
   <br>
-  <a href="https://github.com/RATWareLua" title="@RATWareLua fed her"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-ratwarelua-dark-68dd620.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-ratwarelua-light-ea9e9c3.svg"><img src="./assets/teto/guest-ratwarelua-dark-68dd620.svg" height="34" alt="@RATWareLua fed her"></picture></a>
-  <a href="https://github.com/2md55nmxkw-arch" title="@2md55nmxkw-arch fed her"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-2md55nmxkw-arch-dark-b263dbc.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-2md55nmxkw-arch-light-b169ae7.svg"><img src="./assets/teto/guest-2md55nmxkw-arch-dark-b263dbc.svg" height="34" alt="@2md55nmxkw-arch fed her"></picture></a>
+  <a href="https://github.com/2md55nmxkw-arch" title="@2md55nmxkw-arch has fed her the most: 2 baguettes"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-2md55nmxkw-arch-dark-9cfc040.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-2md55nmxkw-arch-light-9feb8af.svg"><img src="./assets/teto/guest-2md55nmxkw-arch-dark-9cfc040.svg" height="38" alt="@2md55nmxkw-arch has fed her the most: 2 baguettes"></picture></a>
+  <a href="https://github.com/RATWareLua" title="@RATWareLua fed her"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-ratwarelua-dark-332062b.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-ratwarelua-light-e59a962.svg"><img src="./assets/teto/guest-ratwarelua-dark-332062b.svg" height="38" alt="@RATWareLua fed her"></picture></a>
 </p>
 
 <p>
@@ -38,7 +38,7 @@
 </p>
 
 <p>
-  <a href="https://github.com/2md55nmxkw-arch/tzar-hub"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-tzar-hub-dark-e8590e7.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-tzar-hub-light-f64889d.svg"><img src="./assets/teto/row-tzar-hub-dark-e8590e7.svg" width="100%" height="84" alt="tzar-hub: Roblox script hub, keyless and open source, with an in-game command panel (Luau, 0 stars)"></picture></a><br>
+  <a href="https://github.com/2md55nmxkw-arch/tzar-hub"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-tzar-hub-dark-fdc62d9.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-tzar-hub-light-ef84d23.svg"><img src="./assets/teto/row-tzar-hub-dark-fdc62d9.svg" width="100%" height="84" alt="tzar-hub: Roblox script hub, keyless and open source, with an in-game command panel (Luau, 0 stars)"></picture></a><br>
   <a href="https://github.com/2md55nmxkw-arch/endfield-il2dump"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-endfield-il2dump-dark-d5cea1e.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-endfield-il2dump-light-0433461.svg"><img src="./assets/teto/row-endfield-il2dump-dark-d5cea1e.svg" width="100%" height="84" alt="endfield-il2dump: Offline IL2CPP metadata dumper for Unity x64, no injection needed (C++, 2 stars)"></picture></a><br>
   <a href="https://github.com/2md55nmxkw-arch/Loliland-ModLoader"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-loliland-modloader-dark-4e8a97c.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-loliland-modloader-light-3ce5632.svg"><img src="./assets/teto/row-loliland-modloader-dark-4e8a97c.svg" width="100%" height="84" alt="Loliland-ModLoader: Windows loader for a local mod workflow on launcher builds (C++, 1 stars)"></picture></a>
 </p>

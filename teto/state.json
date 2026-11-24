@@ -20,5 +20,9 @@
       "action": "feed",
       "at": "2026-11-23T06:28:42Z"
     }
-  ]
+  ],
+  "feeders": {
+    "2md55nmxkw-arch": 2,
+    "RATWareLua": 1
+  }
 }

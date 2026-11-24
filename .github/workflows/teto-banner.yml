@@ -16,7 +16,7 @@ permissions:
 jobs:
   render:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
 
@@ -36,6 +36,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/teto/banner*.webp assets/teto/banner*-static.png
+          git add assets/teto/banner*.webp assets/teto/banner*-static.png assets/teto/social*.png
           git commit -m "teto: re-render banner" || exit 0
           for i in 1 2 3; do git push && break; git pull --rebase; done
