@@ -29,7 +29,7 @@
   <br>
   <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/counter-dark-b8ff445.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/counter-light-908f0dc.svg"><img src="./assets/teto/counter-dark-b8ff445.svg" width="100%" height="20" alt="2 baguettes so far · the last one came from @2md55nmxkw-arch"></picture>
   <br>
-  <a href="https://github.com/2md55nmxkw-arch" title="@2md55nmxkw-arch fed her"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-2md55nmxkw-arch-dark-04b2770.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-2md55nmxkw-arch-light-1e6e890.svg"><img src="./assets/teto/guest-2md55nmxkw-arch-dark-04b2770.svg" height="34" alt="@2md55nmxkw-arch fed her"></picture></a>
+  <a href="https://github.com/2md55nmxkw-arch" title="@2md55nmxkw-arch fed her"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-2md55nmxkw-arch-dark-b263dbc.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-2md55nmxkw-arch-light-b169ae7.svg"><img src="./assets/teto/guest-2md55nmxkw-arch-dark-b263dbc.svg" height="34" alt="@2md55nmxkw-arch fed her"></picture></a>
 </p>
 
 <p>
@@ -43,7 +43,15 @@
 </p>
 
 <p>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/sep-stack-dark-fa6873b.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/sep-stack-light-01b3fa5.svg"><img src="./assets/teto/sep-stack-dark-fa6873b.svg" width="100%" height="34" alt="Stack"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/sep-activity-dark-336da17.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/sep-activity-light-7ef8591.svg"><img src="./assets/teto/sep-activity-dark-336da17.svg" width="100%" height="34" alt="Activity"></picture>
+</p>
+
+<p>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-a952c22.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-6d79311.svg"><img src="./assets/teto/activity-dark-a952c22.svg" width="100%" height="66" alt="175 contributions in the last 12 weeks"></picture>
+</p>
+
+<p>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/sep-stack-dark-14e5a58.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/sep-stack-light-c195193.svg"><img src="./assets/teto/sep-stack-dark-14e5a58.svg" width="100%" height="56" alt="Stack"></picture>
 </p>
 
 <p>
