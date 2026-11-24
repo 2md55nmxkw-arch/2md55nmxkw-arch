@@ -214,6 +214,13 @@ def wrap_max(text, key, size, max_w, max_lines):
     return lines
 
 
+def wrap_after(text, key, size, max_w, indent, max_lines):
+    """wrap_max(), with the first line starting indent px in (something sits before it)."""
+    head = wrap(text, key, size, max_w - indent)[0]
+    rest = text[len(head):].strip()
+    return [head] + (wrap_max(rest, key, size, max_w, max_lines - 1) if rest and max_lines > 1 else [])
+
+
 def balance(segments, sep, key, size, max_w):
     """Join segments into as few lines as fit max_w, then pick the split with the shortest longest line."""
     def width(group):
