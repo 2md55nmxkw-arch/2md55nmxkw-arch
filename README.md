@@ -29,8 +29,8 @@
   <br>
   <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/counter-dark-2f7ab6c.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/counter-light-6c93fb5.svg"><img src="./assets/teto/counter-dark-2f7ab6c.svg" width="100%" height="40" alt="3 baguettes so far · the last one came from @RATWareLua; 22 more and she sings"></picture>
   <br>
+  <a href="https://github.com/2md55nmxkw-arch" title="@2md55nmxkw-arch has fed her the most: 2 baguettes"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-2md55nmxkw-arch-dark-9cfc040.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-2md55nmxkw-arch-light-9feb8af.svg"><img src="./assets/teto/guest-2md55nmxkw-arch-dark-9cfc040.svg" height="38" alt="@2md55nmxkw-arch has fed her the most: 2 baguettes"></picture></a>
   <a href="https://github.com/RATWareLua" title="@RATWareLua fed her"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-ratwarelua-dark-332062b.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-ratwarelua-light-e59a962.svg"><img src="./assets/teto/guest-ratwarelua-dark-332062b.svg" height="38" alt="@RATWareLua fed her"></picture></a>
-  <a href="https://github.com/2md55nmxkw-arch" title="@2md55nmxkw-arch fed her"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-2md55nmxkw-arch-dark-b7bf159.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-2md55nmxkw-arch-light-0df5b26.svg"><img src="./assets/teto/guest-2md55nmxkw-arch-dark-b7bf159.svg" height="38" alt="@2md55nmxkw-arch fed her"></picture></a>
 </p>
 
 <p>
