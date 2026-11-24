@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-b57b19a.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-4515160.svg"><img src="./assets/teto/dialogue-dark-b57b19a.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, a week ago. The Cmdr panel again, probably. 20 contributions this week. / Crunchy. @2md55nmxkw-arch has excellent taste."></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-abb6255.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-c4fadd5.svg"><img src="./assets/teto/dialogue-dark-abb6255.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, today. The Cmdr panel again, probably. 23 contributions this week. / Crunchy. @2md55nmxkw-arch has excellent taste."></picture>
 </p>
 
 <p align="center">
@@ -47,7 +47,7 @@
 </p>
 
 <p>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-a952c22.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-6d79311.svg"><img src="./assets/teto/activity-dark-a952c22.svg" width="100%" height="66" alt="175 contributions in the last 12 weeks"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-6a7645e.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-bc60a98.svg"><img src="./assets/teto/activity-dark-6a7645e.svg" width="100%" height="66" alt="178 contributions in the last 12 weeks"></picture>
 </p>
 
 <p>
