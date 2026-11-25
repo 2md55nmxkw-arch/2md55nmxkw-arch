@@ -1,19 +1,19 @@
 {
-  "baguettes": 4,
+  "baguettes": 5,
   "last_feeder": "2md55nmxkw-arch",
-  "reply": "@2md55nmxkw-arch brought a baguette. You may stay.",
+  "reply": "Baguette number 5! @2md55nmxkw-arch, you understand me.",
   "last_event": {
     "action": "feed",
     "user": "2md55nmxkw-arch",
-    "at": "2026-11-25T03:35:52Z"
+    "at": "2026-11-25T10:55:39Z"
   },
-  "events": 5,
-  "last_fed_at": "2026-11-25T03:35:52Z",
+  "events": 6,
+  "last_fed_at": "2026-11-25T10:55:39Z",
   "guests": [
     {
       "user": "2md55nmxkw-arch",
       "action": "feed",
-      "at": "2026-11-25T03:35:52Z"
+      "at": "2026-11-25T10:55:39Z"
     },
     {
       "user": "RATWareLua",
@@ -22,7 +22,7 @@
     }
   ],
   "feeders": {
-    "2md55nmxkw-arch": 3,
+    "2md55nmxkw-arch": 4,
     "RATWareLua": 1
   }
 }
