@@ -2,7 +2,7 @@
 
     GITHUB_TOKEN=... LOGIN=2md55nmxkw-arch python teto/fetch.py
 
-Public data only: stars, primary language and last push of the configured projects,
+Public data only: stars, primary language, last push and archived state of the configured projects,
 languages by code size across the owner's public non-fork repos, contributions per day for
 the last 12 weeks. It also fetches the avatar of any guest in state.json that has none cached,
 and recounts who fed Teto how many times from the "teto|feed" issues (state.json "feeders"):
@@ -79,7 +79,7 @@ def main():
         n = nodes.get(p["repo"])
         if n:
             repos[p["repo"]] = {"stars": n["stargazerCount"], "language": (n["primaryLanguage"] or {}).get("name"),
-                                "pushedAt": n["pushedAt"]}
+                                "pushedAt": n["pushedAt"], "archived": n["isArchived"]}
 
     sizes = {}
     skip = {r.lower() for r in cfg.get("languages_exclude_repos", [])}

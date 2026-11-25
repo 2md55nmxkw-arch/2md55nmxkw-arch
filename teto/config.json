@@ -10,6 +10,11 @@
       "flavor": "The Cmdr panel again, probably."
     },
     {
+      "repo": "kimera",
+      "description": "Browser art piece with Kasane Teto: one body, three skins, a revolving stage",
+      "flavor": "Another skin for the same body, probably."
+    },
+    {
       "repo": "endfield-il2dump",
       "description": "Offline IL2CPP metadata dumper for Unity x64, no injection needed",
       "flavor": "More metadata, more structs."

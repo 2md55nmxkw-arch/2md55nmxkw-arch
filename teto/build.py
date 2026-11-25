@@ -25,7 +25,7 @@ import urllib.parse
 
 from lib import (ARROW, FIT, REPO, STAR, THEMES, anchor, avatar_uri, balance, cap_height, char_widths, ellipsize,
                  esc, fam, fluid, fonts_css, load_json, measure, mood, now, parse_time, short_hash, svg, tier_css,
-                 top_feeder, wrap, wrap_max)
+                 top_feeder, wrap, wrap_after, wrap_max)
 
 OUT = REPO / "assets" / "teto"
 CFG = load_json("config.json")
@@ -307,7 +307,8 @@ def meta_columns():
     lw = max((measure(r.get("language") or "—", "ms400", 12) for r in rows), default=24)
     star = -(7.5 + 16 + stw + 4 + 12)  # arrow ink, gap, count, gap, star
     lang = star - 16 - lw - 16  # gap, name, dot + its gap
-    return {"star": star, "lang": lang, "w": -lang}
+    dot = star - 16 - 10  # the narrow layout has no room for the language's name: the dot moves up to the star
+    return {"star": star, "lang": lang, "w": -lang, "dot": dot, "wn": -dot}
 
 
 def row(th, i, p, meta):
@@ -319,23 +320,42 @@ def row(th, i, p, meta):
     if i > 0:
         parts.append(f'<rect width="100%" height="1" fill="{th["border"]}" fill-opacity=".5"/>')
 
+    # a repository archived on GitHub says so, the way GitHub labels it: next to its name, or in
+    # front of the description on the narrow layout, where the name needs the whole line
+    tag = "archived" if r.get("archived") else None
+    tag_w = measure(tag, "ms500", 10.5) + 14 if tag else 0
+    if tag:
+        used["ms500"] = tag
+
+    def pill(cls, x, yc):
+        return (f'<g class="L {cls}"><rect x="{x + .5:.1f}" y="{yc - 8:.1f}" width="{tag_w - 1:.1f}" height="16" rx="8" fill="none" '
+                f'stroke="{th["border"]}"/><text x="{x + 7:.1f}" y="{yc + cap_height("ms500", 10.5) / 2:.1f}" '
+                f'style="{fam("ms500")};font-size:10.5px" fill="{th["fgMuted"]}">{tag}</text></g>')
+
     # layout, text x, title size, description size, line height, title-to-description gap,
-    # air between title and meta, description lines. From "m" down the meta sits on the title
-    # line, so the description gets the full width below it and may take two lines.
+    # room for the title, description lines. From "m" down the meta sits on the title line, so
+    # the description gets the full width below it and may take two lines.
+    beside = tag_w + 10 if tag else 0  # the label next to the title
+    before = tag_w + 6 if tag else 0  # the label in front of the description
     layouts = (
-        ("w", 40, 16, 14, 20, 23, 24, [ellipsize(text, "ms400", 14, FIT["w"] - 40 - 24 - meta["w"])]),
-        ("m", 40, 16, 14, 20, 22, 16, wrap_max(text, "ms400", 14, FIT["m"] - 40, 2)),
-        ("s", 40, 16, 14, 20, 21, 16, wrap_max(text, "ms400", 14, FIT["s"] - 40, 2)),
-        ("n", 32, 15, 13, 18, 20, 12, wrap_max(text, "ms400", 13, FIT["n"] - 32, 2)),
+        ("w", 40, 16, 14, 20, 23, FIT["w"] - 40 - 24 - meta["w"] - beside, [ellipsize(text, "ms400", 14, FIT["w"] - 40 - 24 - meta["w"])]),
+        ("m", 40, 16, 14, 20, 22, FIT["m"] - 40 - 16 - meta["w"] - beside, wrap_max(text, "ms400", 14, FIT["m"] - 40, 2)),
+        ("s", 40, 16, 14, 20, 21, FIT["s"] - 40 - 16 - meta["w"] - beside, wrap_max(text, "ms400", 14, FIT["s"] - 40, 2)),
+        ("n", 32, 15, 13, 18, 20, FIT["n"] - 32 - 12 - meta["wn"], wrap_after(text, "ms400", 13, FIT["n"] - 32, before, 2)),
     )
     mid = {}  # y of the title's cap centre: the index and the meta follow it on the smaller layouts
-    for cls, x, ts, ds, lh, gap, air, lines in layouts:
+    for cls, x, ts, ds, lh, gap, room, lines in layouts:
         cap = cap_height("ms600", ts)
         y = (ROW_H - (cap + gap + (len(lines) - 1) * lh)) / 2 + cap
-        title = ellipsize(name, "ms600", ts, FIT[cls] - x - air - meta["w"])
+        title = ellipsize(name, "ms600", ts, room)
         parts.append(f'<text class="L {cls}" x="{x}" y="{y:.1f}" style="{fam("ms600")};font-size:{ts}px" fill="{th["fg"]}">{esc(title)}</text>')
+        if tag and cls != "n":
+            parts.append(pill(cls, x + measure(title, "ms600", ts) + 10, y - cap / 2))
+        elif tag:
+            parts.append(pill(cls, x, y + gap - cap_height("ms400", ds) / 2))
         for li, line in enumerate(lines):
-            parts.append(f'<text class="L {cls}" x="{x}" y="{y + gap + li * lh:.1f}" style="{fam("ms400")};font-size:{ds}px" '
+            lx = x + before if cls == "n" and li == 0 else x
+            parts.append(f'<text class="L {cls}" x="{lx:.1f}" y="{y + gap + li * lh:.1f}" style="{fam("ms400")};font-size:{ds}px" '
                          f'fill="{th["fgMuted"]}">{esc(line)}</text>')
         used["ms600"] += title
         used["ms400"] += "".join(lines)
@@ -356,15 +376,20 @@ def row(th, i, p, meta):
         css += ("@keyframes pl{0%{transform:scale(1);opacity:.7}70%,100%{transform:scale(2.3);opacity:0}}"
                 ".pl{transform-box:fill-box;transform-origin:center;animation:pl 2.4s ease-out infinite}"
                 "@media (prefers-reduced-motion:reduce){.pl{display:none}}")
-    m = ((f'<circle class="pl" cx="{meta["lang"] + 5:.1f}" cy="0" r="5" fill="{share_color(th, lang)}"/>' if fresh else "")
-         + f'<circle cx="{meta["lang"] + 5:.1f}" cy="0" r="5" fill="{share_color(th, lang)}"/>'
-         + label.format(x=meta["lang"] + 16, t=esc(lang))
+    colour = share_color(th, lang)
+
+    def dot(cx):
+        ring = f'<circle class="pl" cx="{cx:.1f}" cy="0" r="5" fill="{colour}"/>' if fresh else ""
+        return ring + f'<circle cx="{cx:.1f}" cy="0" r="5" fill="{colour}"/>'
+
+    m = (f'<g class="L w m s">{dot(meta["lang"] + 5)}{label.format(x=meta["lang"] + 16, t=esc(lang))}</g>'
+         + f'<g class="L n">{dot(meta["dot"] + 5)}</g>'  # no room for the name next to a long title: the dot alone
          + STAR.format(x=f"{meta['star']:.1f}", y="-6", s=0.75, c=th["fgMuted"])
          + label.format(x=meta["star"] + 16, t=st)
          + ARROW.format(x="-11.75", y="-8", c=th["fgMuted"]))
     parts.append(anchor("100%", f'<g class="meta">{m}</g>'))
 
-    alt = f"{name}: {text} ({lang}, {stars} stars)"
+    alt = f"{name}: {text} ({lang}, {stars} stars{', archived' if tag else ''})"
     return fluid(ROW_H, "".join(parts), fonts_css(used) + css, alt), alt, ROW_H
 
 

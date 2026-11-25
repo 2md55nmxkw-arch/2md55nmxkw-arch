@@ -38,9 +38,10 @@
 </p>
 
 <p>
-  <a href="https://github.com/2md55nmxkw-arch/tzar-hub"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-tzar-hub-dark-fdc62d9.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-tzar-hub-light-ef84d23.svg"><img src="./assets/teto/row-tzar-hub-dark-fdc62d9.svg" width="100%" height="84" alt="tzar-hub: Roblox script hub, keyless and open source, with an in-game command panel (Luau, 0 stars)"></picture></a><br>
-  <a href="https://github.com/2md55nmxkw-arch/endfield-il2dump"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-endfield-il2dump-dark-d5cea1e.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-endfield-il2dump-light-0433461.svg"><img src="./assets/teto/row-endfield-il2dump-dark-d5cea1e.svg" width="100%" height="84" alt="endfield-il2dump: Offline IL2CPP metadata dumper for Unity x64, no injection needed (C++, 2 stars)"></picture></a><br>
-  <a href="https://github.com/2md55nmxkw-arch/Loliland-ModLoader"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-loliland-modloader-dark-4e8a97c.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-loliland-modloader-light-3ce5632.svg"><img src="./assets/teto/row-loliland-modloader-dark-4e8a97c.svg" width="100%" height="84" alt="Loliland-ModLoader: Windows loader for a local mod workflow on launcher builds (C++, 1 stars)"></picture></a>
+  <a href="https://github.com/2md55nmxkw-arch/tzar-hub"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-tzar-hub-dark-efde128.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-tzar-hub-light-c2a995f.svg"><img src="./assets/teto/row-tzar-hub-dark-efde128.svg" width="100%" height="84" alt="tzar-hub: Roblox script hub, keyless and open source, with an in-game command panel (Luau, 0 stars)"></picture></a><br>
+  <a href="https://github.com/2md55nmxkw-arch/kimera"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-kimera-dark-0b99dbd.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-kimera-light-55ab8d6.svg"><img src="./assets/teto/row-kimera-dark-0b99dbd.svg" width="100%" height="84" alt="kimera: Browser art piece with Kasane Teto: one body, three skins, a revolving stage (TypeScript, 0 stars)"></picture></a><br>
+  <a href="https://github.com/2md55nmxkw-arch/endfield-il2dump"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-endfield-il2dump-dark-0f7515b.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-endfield-il2dump-light-10948c5.svg"><img src="./assets/teto/row-endfield-il2dump-dark-0f7515b.svg" width="100%" height="84" alt="endfield-il2dump: Offline IL2CPP metadata dumper for Unity x64, no injection needed (C++, 2 stars, archived)"></picture></a><br>
+  <a href="https://github.com/2md55nmxkw-arch/Loliland-ModLoader"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/row-loliland-modloader-dark-15a2779.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/row-loliland-modloader-light-1fafbe5.svg"><img src="./assets/teto/row-loliland-modloader-dark-15a2779.svg" width="100%" height="84" alt="Loliland-ModLoader: Windows loader for a local mod workflow on launcher builds (C++, 1 stars, archived)"></picture></a>
 </p>
 
 <p>
@@ -48,7 +49,7 @@
 </p>
 
 <p>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-33f85ff.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-d4fb616.svg"><img src="./assets/teto/activity-dark-33f85ff.svg" width="100%" height="66" alt="179 contributions in the last 12 weeks"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-9718849.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-ad3e691.svg"><img src="./assets/teto/activity-dark-9718849.svg" width="100%" height="66" alt="180 contributions in the last 12 weeks"></picture>
 </p>
 
 <p>
