@@ -49,7 +49,7 @@
 </p>
 
 <p>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-b5b3778.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-a725b8c.svg"><img src="./assets/teto/activity-dark-b5b3778.svg" width="100%" height="66" alt="182 contributions in the last 12 weeks"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-089508e.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-2579893.svg"><img src="./assets/teto/activity-dark-089508e.svg" width="100%" height="66" alt="184 contributions in the last 12 weeks"></picture>
 </p>
 
 <p>
