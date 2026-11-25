@@ -1,28 +1,28 @@
 {
-  "baguettes": 3,
-  "last_feeder": "RATWareLua",
-  "reply": "Mmm, warm bread. Thank you, @RATWareLua~",
+  "baguettes": 4,
+  "last_feeder": "2md55nmxkw-arch",
+  "reply": "@2md55nmxkw-arch brought a baguette. You may stay.",
   "last_event": {
     "action": "feed",
-    "user": "RATWareLua",
-    "at": "2026-11-24T16:51:20Z"
+    "user": "2md55nmxkw-arch",
+    "at": "2026-11-25T03:35:52Z"
   },
-  "events": 4,
-  "last_fed_at": "2026-11-24T16:51:20Z",
+  "events": 5,
+  "last_fed_at": "2026-11-25T03:35:52Z",
   "guests": [
+    {
+      "user": "2md55nmxkw-arch",
+      "action": "feed",
+      "at": "2026-11-25T03:35:52Z"
+    },
     {
       "user": "RATWareLua",
       "action": "feed",
       "at": "2026-11-24T16:51:20Z"
-    },
-    {
-      "user": "2md55nmxkw-arch",
-      "action": "feed",
-      "at": "2026-11-23T06:28:42Z"
     }
   ],
   "feeders": {
-    "2md55nmxkw-arch": 2,
+    "2md55nmxkw-arch": 3,
     "RATWareLua": 1
   }
 }
