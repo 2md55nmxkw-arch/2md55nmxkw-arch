@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-32977e3.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-aa40b32.svg"><img src="./assets/teto/dialogue-dark-32977e3.svg" width="100%" height="118" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, yesterday. The Cmdr panel again, probably. 7 days in a row. Somebody is on a roll. / Mmm, warm bread. Thank you, @2md55nmxkw-arch~"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-3b57f21.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-5a58b70.svg"><img src="./assets/teto/dialogue-dark-3b57f21.svg" width="100%" height="118" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, yesterday. The Cmdr panel again, probably. 8 days in a row. Somebody is on a roll. / Mmm, warm bread. Thank you, @2md55nmxkw-arch~"></picture>
 </p>
 
 <p align="center">
@@ -49,7 +49,7 @@
 </p>
 
 <p>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-089508e.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-2579893.svg"><img src="./assets/teto/activity-dark-089508e.svg" width="100%" height="66" alt="184 contributions in the last 12 weeks"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-a1dc470.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-cae2db3.svg"><img src="./assets/teto/activity-dark-a1dc470.svg" width="100%" height="66" alt="194 contributions in the last 12 weeks"></picture>
 </p>
 
 <p>
@@ -57,14 +57,14 @@
 </p>
 
 <p>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/stack-dark-f6acb5f.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/stack-light-c689bfd.svg"><img src="./assets/teto/stack-dark-f6acb5f.svg" width="100%" height="44" alt="Luau 50%, TypeScript 25%, Lua 20%, CSS 2%, JavaScript 2%, Other 1%"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/stack-dark-54455df.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/stack-light-938e610.svg"><img src="./assets/teto/stack-dark-54455df.svg" width="100%" height="44" alt="Luau 46%, TypeScript 23%, Lua 18%, CSS 5%, JavaScript 4%, Other 4%"></picture>
   <br>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-luau-dark-6c6b73f.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-luau-light-7c453d5.svg"><img src="./assets/teto/chip-luau-dark-6c6b73f.svg" height="22" alt="Luau 50%"></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-typescript-dark-534cb99.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-typescript-light-ffb743e.svg"><img src="./assets/teto/chip-typescript-dark-534cb99.svg" height="22" alt="TypeScript 25%"></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-lua-dark-ce777b4.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-lua-light-c0a620f.svg"><img src="./assets/teto/chip-lua-dark-ce777b4.svg" height="22" alt="Lua 20%"></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-css-dark-7331e0e.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-css-light-608df63.svg"><img src="./assets/teto/chip-css-dark-7331e0e.svg" height="22" alt="CSS 2%"></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-javascript-dark-f11ce25.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-javascript-light-d30a663.svg"><img src="./assets/teto/chip-javascript-dark-f11ce25.svg" height="22" alt="JavaScript 2%"></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-other-dark-a4452bc.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-other-light-598d14c.svg"><img src="./assets/teto/chip-other-dark-a4452bc.svg" height="22" alt="Other 1%"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-luau-dark-296eabe.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-luau-light-f4538df.svg"><img src="./assets/teto/chip-luau-dark-296eabe.svg" height="22" alt="Luau 46%"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-typescript-dark-332d49e.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-typescript-light-0fefee4.svg"><img src="./assets/teto/chip-typescript-dark-332d49e.svg" height="22" alt="TypeScript 23%"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-lua-dark-f2db4f5.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-lua-light-876f143.svg"><img src="./assets/teto/chip-lua-dark-f2db4f5.svg" height="22" alt="Lua 18%"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-css-dark-025a818.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-css-light-b6b04e9.svg"><img src="./assets/teto/chip-css-dark-025a818.svg" height="22" alt="CSS 5%"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-javascript-dark-a659bd6.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-javascript-light-9321b74.svg"><img src="./assets/teto/chip-javascript-dark-a659bd6.svg" height="22" alt="JavaScript 4%"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/chip-other-dark-abb9cf6.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/chip-other-light-bb7d9c1.svg"><img src="./assets/teto/chip-other-dark-abb9cf6.svg" height="22" alt="Other 4%"></picture>
 </p>
 
 <p align="center">

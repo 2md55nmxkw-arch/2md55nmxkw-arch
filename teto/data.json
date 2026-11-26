@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-25T11:27:54Z",
+  "generated": "2026-11-26T11:03:58Z",
   "repos": {
     "tzar-hub": {
       "stars": 0,
@@ -29,28 +29,27 @@
   "languages": [
     [
       "Luau",
-      50
+      46
     ],
     [
       "TypeScript",
-      25
+      23
     ],
     [
       "Lua",
-      20
+      18
     ],
     [
       "CSS",
-      2
+      5
     ],
     [
       "JavaScript",
-      2
+      4
     ]
   ],
-  "week_contributions": 29,
+  "week_contributions": 36,
   "activity": [
-    0,
     0,
     0,
     0,
@@ -133,6 +132,7 @@
     10,
     1,
     9,
-    3
+    12,
+    1
   ]
 }
