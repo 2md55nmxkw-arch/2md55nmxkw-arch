@@ -11,15 +11,15 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: light) and (prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-happy-light-static.png">
-    <source media="(prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-happy-static.png">
-    <source media="(prefers-color-scheme: light)" srcset="./assets/teto/banner-happy-light.webp">
-    <img src="./assets/teto/banner-happy.webp" width="100%" alt="Kasane Teto pressed against the glass of your screen, project cards floating around her, sparkling: she has just been fed">
+    <source media="(prefers-color-scheme: light) and (prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-light-static.png">
+    <source media="(prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-static.png">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/teto/banner-light.webp">
+    <img src="./assets/teto/banner.webp" width="100%" alt="Kasane Teto pressed against the glass of your screen, project cards floating around her">
   </picture>
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-3b57f21.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-5a58b70.svg"><img src="./assets/teto/dialogue-dark-3b57f21.svg" width="100%" height="118" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, yesterday. The Cmdr panel again, probably. 8 days in a row. Somebody is on a roll. / Mmm, warm bread. Thank you, @2md55nmxkw-arch~"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-ea71430.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-b94ae43.svg"><img src="./assets/teto/dialogue-dark-ea71430.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, 2 days ago. The Cmdr panel again, probably. 8 days in a row. Somebody is on a roll. / Mmm, warm bread. Thank you, @2md55nmxkw-arch~"></picture>
 </p>
 
 <p align="center">
@@ -49,7 +49,7 @@
 </p>
 
 <p>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-a1dc470.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-cae2db3.svg"><img src="./assets/teto/activity-dark-a1dc470.svg" width="100%" height="66" alt="194 contributions in the last 12 weeks"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-6c5ba29.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-364255c.svg"><img src="./assets/teto/activity-dark-6c5ba29.svg" width="100%" height="66" alt="194 contributions in the last 12 weeks"></picture>
 </p>
 
 <p>
