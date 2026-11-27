@@ -11,15 +11,15 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: light) and (prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-light-static.png">
-    <source media="(prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-static.png">
-    <source media="(prefers-color-scheme: light)" srcset="./assets/teto/banner-light.webp">
-    <img src="./assets/teto/banner.webp" width="100%" alt="Kasane Teto pressed against the glass of your screen, project cards floating around her">
+    <source media="(prefers-color-scheme: light) and (prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-happy-light-static.png">
+    <source media="(prefers-reduced-motion: reduce)" srcset="./assets/teto/banner-happy-static.png">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/teto/banner-happy-light.webp">
+    <img src="./assets/teto/banner-happy.webp" width="100%" alt="Kasane Teto pressed against the glass of your screen, project cards floating around her, sparkling: she has just been fed">
   </picture>
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-ea71430.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-b94ae43.svg"><img src="./assets/teto/dialogue-dark-ea71430.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, 2 days ago. The Cmdr panel again, probably. 8 days in a row. Somebody is on a roll. / Mmm, warm bread. Thank you, @2md55nmxkw-arch~"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-eee4724.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-2be482b.svg"><img src="./assets/teto/dialogue-dark-eee4724.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, 2 days ago. The Cmdr panel again, probably. 8 days in a row. Somebody is on a roll. / @2md55nmxkw-arch brought a baguette. You may stay."></picture>
 </p>
 
 <p align="center">
@@ -27,9 +27,9 @@
   <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=teto%7Cnews&body=Teto%2C+what%27s+new%3F%0A%0AJust+press+%2A%2ACreate%2A%2A.+Teto+answers+here+and+on+the+profile+in+about+a+minute.%0A%0APlease+don%27t+change+the+title."><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/btn-news-dark-9f92784.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/btn-news-light-8446a60.svg"><img src="./assets/teto/btn-news-dark-9f92784.svg" height="32" alt="What's new?"></picture></a>
   <a href="https://github.com/2md55nmxkw-arch/2md55nmxkw-arch/issues/new?title=teto%7Cpoke&body=%2Apoke%2A%0A%0AJust+press+%2A%2ACreate%2A%2A.+Teto+answers+here+and+on+the+profile+in+about+a+minute.%0A%0APlease+don%27t+change+the+title."><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/btn-poke-dark-2051f74.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/btn-poke-light-76e2354.svg"><img src="./assets/teto/btn-poke-dark-2051f74.svg" height="32" alt="Poke"></picture></a>
   <br>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/counter-dark-cead79a.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/counter-light-44bb513.svg"><img src="./assets/teto/counter-dark-cead79a.svg" width="100%" height="40" alt="7 baguettes so far · the last one came from @2md55nmxkw-arch; 18 more and she sings"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/counter-dark-de62029.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/counter-light-fce98ab.svg"><img src="./assets/teto/counter-dark-de62029.svg" width="100%" height="40" alt="8 baguettes so far · the last one came from @2md55nmxkw-arch; 17 more and she sings"></picture>
   <br>
-  <a href="https://github.com/2md55nmxkw-arch" title="@2md55nmxkw-arch has fed her the most: 6 baguettes"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-2md55nmxkw-arch-dark-bcf7bda.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-2md55nmxkw-arch-light-3b41c51.svg"><img src="./assets/teto/guest-2md55nmxkw-arch-dark-bcf7bda.svg" height="38" alt="@2md55nmxkw-arch has fed her the most: 6 baguettes"></picture></a>
+  <a href="https://github.com/2md55nmxkw-arch" title="@2md55nmxkw-arch has fed her the most: 7 baguettes"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-2md55nmxkw-arch-dark-a9719b1.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-2md55nmxkw-arch-light-07b719d.svg"><img src="./assets/teto/guest-2md55nmxkw-arch-dark-a9719b1.svg" height="38" alt="@2md55nmxkw-arch has fed her the most: 7 baguettes"></picture></a>
   <a href="https://github.com/RATWareLua" title="@RATWareLua fed her"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/guest-ratwarelua-dark-332062b.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/guest-ratwarelua-light-e59a962.svg"><img src="./assets/teto/guest-ratwarelua-dark-332062b.svg" height="38" alt="@RATWareLua fed her"></picture></a>
 </p>
 
