@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-eee4724.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-2be482b.svg"><img src="./assets/teto/dialogue-dark-eee4724.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, 2 days ago. The Cmdr panel again, probably. 8 days in a row. Somebody is on a roll. / @2md55nmxkw-arch brought a baguette. You may stay."></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/dialogue-dark-2bf6e54.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/dialogue-light-a97a09e.svg"><img src="./assets/teto/dialogue-dark-2bf6e54.svg" width="100%" height="105" alt="This is 2md55.arch. They take games and runtimes apart, then build the tools they wished they had. / Latest push went to tzar-hub, 3 days ago. The Cmdr panel again, probably. 9 days in a row. Somebody is on a roll. / @2md55nmxkw-arch brought a baguette. You may stay."></picture>
 </p>
 
 <p align="center">
@@ -49,7 +49,7 @@
 </p>
 
 <p>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-6c5ba29.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-364255c.svg"><img src="./assets/teto/activity-dark-6c5ba29.svg" width="100%" height="66" alt="194 contributions in the last 12 weeks"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/teto/activity-dark-99bc3eb.svg"><source media="(prefers-color-scheme: light)" srcset="./assets/teto/activity-light-904fc64.svg"><img src="./assets/teto/activity-dark-99bc3eb.svg" width="100%" height="66" alt="195 contributions in the last 12 weeks"></picture>
 </p>
 
 <p>
